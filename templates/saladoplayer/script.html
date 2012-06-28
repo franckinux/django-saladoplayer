@@ -1,0 +1,28 @@
+<!-- (C) Franck Barbenoire <fbarbenoire@yahoo.fr>
+License : GPL v3 -->
+{% load static %}
+<script type="text/javascript" src="{% get_static_prefix %}js/swfobject.js"></script>
+<script type="text/javascript">
+<!--
+  var flashvars = {};
+  flashvars.xml = "/saladoplayer/{{ tour_id }}/{{ hotspot }}/"
+  flashvars.tilde = "{% get_static_prefix %}";
+  var params = {};
+  params.play = "true";
+  params.loop = "false";
+  params.menu = "false";
+  params.quality = "high";
+  params.scale = "showall";
+  params.wmode = "window";
+  params.bgcolor = "#FFFFFF";
+  params.devicefont = "false";
+  params.allowfullscreen = "true";
+  {% if saladoplayersettings.secure %}
+  params.allowscriptaccess = "sameDomain";
+  {% else %}
+  params.allowscriptaccess = "always";
+  {% endif %}
+  var attributes = {};
+  swfobject.embedSWF("{% get_static_prefix %}SaladoPlayer-1.3.swf", "SaladoPlayer", "{{ width }}", "{{ height }}", "10.0.0", "{% get_static_prefix %}swf/expressInstall.swf", flashvars, params, attributes);
+-->
+</script>

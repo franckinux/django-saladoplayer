@@ -1,0 +1,70 @@
+<!-- (C) Franck Barbenoire <fbarbenoire@yahoo.fr>
+License : GPL v3 -->
+<?xml version="1.0" encoding="utf-8"?>
+{% load l10n %}
+<SaladoPlayer>
+    <global debug="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}">
+        <control autorotation="enabled:false"/>
+        <control mouseWheelTrap="true"/>
+        <trace open="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}"/>
+	<branding visible="{% if saladoplayersettings.branding %}true{% else %}false{% endif %}"/>
+    </global>
+    <panoramas{% if initial_panorama %} firstPanorama="panorama_id_{{ initial_panorama }}"{% endif %}>
+        {% for panorama in tour_list %}
+        <panorama id="panorama_id_{{ panorama.id }}" path="{{ saladoplayersettings.url }}/{{ panorama.directory }}/face_f.xml">
+            {% if hotspot %}
+            {% for target in panorama.target_list %}
+            <image id="hotspot_panorama_{{ target.id }}" location="pan:{{ target.pan|unlocalize }},tilt:{{ target.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="~hotspots/images/pas_orange_blanc_carre.png"
+                   mouse="onClick:loadPano_{{ target.id }}{% if target.show_information %},onOver:showBubbleText_panorama_{{ target.id }},onOut:hideBubble{% endif %}"/>
+            {% endfor %}
+            {% for information in panorama.information_list %}
+            <image id="hotspot_information_{{ information.id }}" location="pan:{{ information.pan|unlocalize }},tilt:{{ information.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="~hotspots/images/info_bleu_blanc_triangle.png"
+                   mouse="onOver:showBubbleText_information_{{ information.id }},onOut:hideBubble"/>
+            {% endfor %}
+            {% endif %}
+        </panorama>
+        {% endfor %}
+    </panoramas>
+    <modules>
+        <ButtonBar path="~modules/buttonbar/ButtonBar-1.3.swf">
+            <buttons path="~modules/buttonbar/images/buttons_dark_30x30.png">
+               <button name="up"/>
+               <button name="down"/>
+               <button name="left"/>
+               <button name="right"/>
+               <button name="in"/>
+               <button name="out"/>
+               <button name="drag"/>
+               <button name="fullscreen"/>
+            </buttons>
+        </ButtonBar>
+        <MouseCursor path="~modules/mousecursor/MouseCursor-1.2.swf">
+           <settings path="~modules/mousecursor/images/cursors_31x31.png"/>
+        </MouseCursor>
+        {% if saladoplayersettings.viewfinder %}
+        <ViewFinder path="~modules/ViewFinder-1.3.swf"/>
+        {% endif %}
+        <InfoBubble path="~modules/InfoBubble-1.3.2.swf">
+            <bubbles>
+                {% for panorama in tour_list %}
+                <text id="bubbleText_panorama_{{ panorama.id }}" text="{{ panorama.information }}"/>
+                {% for information in panorama.information_list %}
+                <text id="bubbleText_information_{{ information.id }}" text="{{ information.information }}"/>
+                {% endfor %}
+                {% endfor %}
+            </bubbles>
+        </InfoBubble>
+    </modules>
+    {% if hotspot %}
+    <actions>
+        {% for panorama in tour_list %}
+        <action id="loadPano_{{ panorama.id }}" content="SaladoPlayer.loadPano(panorama_id_{{ panorama.id }})"/>
+        <action id="showBubbleText_panorama_{{ panorama.id }}" content="InfoBubble.show(bubbleText_panorama_{{ panorama.id }})"/>
+        {% for information in panorama.information_list %}
+        <action id="showBubbleText_information_{{ information.id }}" content="InfoBubble.show(bubbleText_information_{{ information.id }})"/>
+        {% endfor %}
+        {% endfor %}
+        <action id="hideBubble" content="InfoBubble.hide()"/>
+    </actions>
+    {% endif%}
+</SaladoPlayer>
