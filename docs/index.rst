@@ -15,6 +15,9 @@ Contents:
    installation
    configuration
    templates
+   tips
+
+Example : http://fcgi.franck-barbenoire.fr/visite/salle/1/hs/
 
 Indices and tables
 ==================

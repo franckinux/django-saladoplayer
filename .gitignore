@@ -1,6 +1,7 @@
 MANIFEST
 *.pyc
 *~
+build/*
 dist/*
 *.log
 django_saladoplayer.egg-info/*
