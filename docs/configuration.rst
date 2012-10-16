@@ -10,9 +10,9 @@ You configure your panorama tour by giving all the necessary informations in the
 * **Panoramas**. A panorama is a spheric image stored in a particular directory. A panorama is included in a tour. Its fields are as follows :
 
     * **Directory**. This is a string field. The name of the directory containing the panorama. The url of the root directory of the panorama is obtained by concataining the strings SALADOPLAYER_URL + <directory field value>.
-    * **Information**. This is a string field. Its value is used as label which is displayed when the mouse cursor is over a panorama hotspot.
+    * **Information**. This is a string field. Its value is used as a label which is displayed when the mouse cursor is over a panorama hotspot.
 
-* **Chainings**. A chaining record describes the link between two panoramas. It enabled to display a hotspot panorama at the specified position. When you click on the hotspot, the destination panorama is displayed. Its fields are as follows :
+* **Chainings**. A chaining record describes the link between two panoramas. It enables to display a hotspot panorama at the specified position. When you click on the hotspot, the destination panorama is displayed. Its fields are as follows :
 
     * **From Panorama**. The source panorama.
     * **To Panorama**. The destination panorama.
@@ -23,11 +23,11 @@ You configure your panorama tour by giving all the necessary informations in the
 * **Initial Panoramas**. It specifies what is the first panorama which has to be displayed when the tour starts. Its fields are as follows :
 
     * **Tour**. The panorama tour.
-    * **Panorama**.The first panorama in the tour.
+    * **Panorama**. The first panorama in the tour.
 
-* **Hotspot Informations**. Enabled to display some text when the mouse cursor is over an information hotspot. Its fields are as follows :
+* **Hotspot Informations**. It enables to display some text when the mouse cursor is over an information hotspot. Its fields are as follows :
 
-    * **Panorama**. The panorama the information has to be displayed in.
+    * **Panorama**. The panorama where the information has to be displayed in.
     * **Pan**. the pan parameter of the hotspot position in the panorama.
     * **Tilt**. the tilt parameter of the hotspot position in the panorama.
-    * **Information**. This is a string field. This is the text which has to be displayed when the mouse cursor is over an information hotspot.
+    * **Information**. This is a string field. Its value is used as a label which is displayed when the mouse cursor is over the information hotspot.

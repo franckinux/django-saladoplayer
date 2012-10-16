@@ -11,8 +11,8 @@ You can use the following templates tags for including them in your own template
 
     * **tour_id**. This is an integer argument. This is the tour id of the tour to be displayed.
     * **hotspot**. This is a string argument. Its value may be "hs" or "nohs" depending on whether you want the hotspots to be displayed or not.
-    * **Height**. This is an integer argument. This is the height of the SaladoPlayer window.
-    * **Width**. This is an integer argument. This is the width of the SaladoPlayer window::
+    * **height**. This is an integer argument. This is the height of the SaladoPlayer window.
+    * **width**. This is an integer argument. This is the width of the SaladoPlayer window::
 
         {% saladoplayerscript tour_id hotspot height width %}
 
