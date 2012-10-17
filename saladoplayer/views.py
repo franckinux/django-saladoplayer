@@ -15,10 +15,10 @@ def xml(request, tour_id, hotspot):
     # initial panorama in the tour
     initial_panorama_list = tour.initialpanorama_set.all()
     initial_panorama = initial_panorama_list[0].panorama_id \
-                       if len(initial_panorama_list) != 0 else None
+                       if len(initial_panorama_list) == 1 else None
 
     # default values
-    tour_list = []
+    panorama_list = []
 
     # we iterate on all panoramas in the tour
     panoramas = tour.panorama_set.all()
@@ -54,11 +54,12 @@ def xml(request, tour_id, hotspot):
                            'directory': panorama.directory,
                            'target_list': target_list,
                            'information_list': information_list}
-        tour_list.append(panorama_config)
+        panorama_list.append(panorama_config)
 
     return render(request,
                   'saladoplayer/config.xml',
-                  {'tour_list': tour_list,
+                  {'tour': tour,
+                   'panorama_list': panorama_list,
                    'initial_panorama': initial_panorama,
                    'hotspot': hotspot == 'hs' })
 

@@ -11,7 +11,7 @@ License : GPL v3 -->
         <branding visible="{% if saladoplayersettings.branding %}true{% else %}false{% endif %}"/>
     </global>
     <panoramas>
-        {% for panorama in tour_list %}
+        {% for panorama in panorama_list %}
         <panorama id="panorama_id_{{ panorama.id }}" path="{{ saladoplayersettings.url }}/{{ panorama.directory }}/face_f.xml">
             {% if hotspot %}
             {% for target in panorama.target_list %}
@@ -47,7 +47,7 @@ License : GPL v3 -->
         {% endif %}
         <InfoBubble path="~modules/InfoBubble-1.3.2.swf">
             <bubbles>
-                {% for panorama in tour_list %}
+                {% for panorama in panorama_list %}
                 <text id="bubbleText_panorama_{{ panorama.id }}" text="{{ panorama.information }}"/>
                 {% for information in panorama.information_list %}
                 <text id="bubbleText_information_{{ information.id }}" text="{{ information.information }}"/>
@@ -55,10 +55,21 @@ License : GPL v3 -->
                 {% endfor %}
             </bubbles>
         </InfoBubble>
+        {% if tour.display_dropmenu %}
+        <DropDown path="~modules/DropDown-1.2.swf">
+           <window align="horizontal:left,vertical:bottom" move="horizontal:100,vertical:-10"/>
+           <box opensUp="true" style="fontSize:14"/>
+           <elements>
+              {% for panorama in panorama_list %}
+              <element label="{{ panorama.information }}" target="panorama_id_{{ panorama.id }}"/>
+              {% endfor %}
+           </elements>
+        </DropDown> 
+        {% endif %}
     </modules>
     {% if hotspot %}
     <actions>
-        {% for panorama in tour_list %}
+        {% for panorama in panorama_list %}
         <action id="loadPano_{{ panorama.id }}" content="SaladoPlayer.loadPano(panorama_id_{{ panorama.id }})"/>
         <action id="showBubbleText_panorama_{{ panorama.id }}" content="InfoBubble.show(bubbleText_panorama_{{ panorama.id }})"/>
         {% for information in panorama.information_list %}

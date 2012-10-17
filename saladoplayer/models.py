@@ -11,6 +11,7 @@ from django.db import models
 class Tour(models.Model):
     """Defines the panoramas in the tour."""
     title = models.CharField(max_length=64)
+    display_dropmenu = models.BooleanField()
 
     def __unicode__(self):
         return self.title
