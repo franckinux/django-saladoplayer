@@ -6,7 +6,7 @@ License : GPL v3 -->
     <global debug="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}">
         <control autorotation="enabled:false"/>
         <control mouseWheelTrap="true"/>
-        {% if initial_panorama %}<panoramas firstPanorama="panorama_id_{{ initial_panorama }}"/>{% endif %}
+        {% if first_panorama %}<panoramas firstPanorama="panorama_id_{{ first_panorama }}"/>{% endif %}
         <trace open="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}"/>
         <branding visible="{% if saladoplayersettings.branding %}true{% else %}false{% endif %}"/>
     </global>

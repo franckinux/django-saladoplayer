@@ -6,7 +6,8 @@ You configure your panorama tour by giving all the necessary informations in the
 * **Tours**. A tour is a set of panoramas. When creating a tour, you can also create panoramas in the same form. Its fields are as follows :
 
     * **Title**. This is a string field. This is the title of the tour. It is used as a prefix for the panorama information field.
-    * **Display_dropmenu**. This is a boolean field. It enables to display a drop menu for selecting the panorama you want to move to.
+    * **Display dropmenu**. This is a boolean field. It enables to display a drop menu for selecting the panorama you want to move to.
+    * **First panorama**. It specifies what is the first panorama which has to be displayed when the tour starts.
 
 * **Panoramas**. A panorama is a spheric image stored in a particular directory. A panorama is included in a tour. Its fields are as follows :
 
@@ -24,11 +25,6 @@ You configure your panorama tour by giving all the necessary informations in the
     * **Pan**. the pan parameter of the hotspot position of the destination panorama in the source panorama. You can get this value by setting SALADOPLAYER_VIEWER to True in your settings.py.
     * **Tilt**. the same as above but for the the tilt parameter.
     * **Show Information**. This is a boolean field. Whether to display or not the information of the destination panorama.
-
-* **Initial Panoramas**. It specifies what is the first panorama which has to be displayed when the tour starts. Its fields are as follows :
-
-    * **Tour**. The panorama tour.
-    * **Panorama**. The first panorama in the tour.
 
 * **Hotspot Informations**. It enables to display some text when the mouse cursor is over an information hotspot. Its fields are as follows :
 

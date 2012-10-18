@@ -7,7 +7,7 @@ License : GPL v3"""
 
 from django.contrib import admin
 from django import forms
-from saladoplayer.models import Tour, Panorama, Chaining, InitialPanorama, HotspotInformation
+from saladoplayer.models import Tour, Panorama, Chaining, HotspotInformation
 
 class PanoramaInline(admin.TabularInline):
     model = Panorama
@@ -71,6 +71,5 @@ class HotspotInformationAdmin(admin.ModelAdmin):
 admin.site.register(Tour, TourAdmin)
 admin.site.register(Panorama, PanoramaAdmin)
 admin.site.register(Chaining, ChainingAdmin)
-admin.site.register(InitialPanorama)
 admin.site.register(HotspotInformation, HotspotInformationAdmin)
 
