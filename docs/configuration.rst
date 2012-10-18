@@ -8,6 +8,7 @@ You configure your panorama tour by giving all the necessary informations in the
     * **Title**. This is a string field. This is the title of the tour. It is used as a prefix for the panorama information field.
     * **Display dropmenu**. This is a boolean field. It enables to display a drop menu for selecting the panorama you want to move to.
     * **First panorama**. It specifies what is the first panorama which has to be displayed when the tour starts.
+    * **Auto rotation**. This is a boolean field. It enabled the rotation of the panorama after a 10 seconds delay.
 
 * **Panoramas**. A panorama is a spheric image stored in a particular directory. A panorama is included in a tour. Its fields are as follows :
 

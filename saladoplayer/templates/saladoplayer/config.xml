@@ -4,7 +4,7 @@ License : GPL v3 -->
 {% load l10n %}
 <SaladoPlayer>
     <global debug="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}">
-        <control autorotation="enabled:false"/>
+        <control autorotation="enabled:{% if tour.auto_rotation %}true{% else %}false{% endif %},delay:10"/>
         <control mouseWheelTrap="true"/>
         {% if tour.first_panorama %}<panoramas firstPanorama="panorama_{{ tour.first_panorama.id }}"/>{% endif %}
         <trace open="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}"/>

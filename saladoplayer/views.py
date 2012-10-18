@@ -9,7 +9,7 @@ from django.shortcuts import render, get_object_or_404
 from saladoplayer.models import Tour, Chaining
 
 def xml(request, tour_id, hotspot):
-    """Renders the xml file needed by saladoplayer flash script"""
+    """Renders the xml file needed by saladoplayer flash script."""
     tour = get_object_or_404(Tour, pk=tour_id)
 
     # first panorama in the tour
