@@ -13,6 +13,32 @@ class PanoramaInline(admin.TabularInline):
     model = Panorama
     extra = 2
 
+class PanoramaAdminForm(forms.ModelForm):
+    class Meta:
+        model = Panorama
+
+    def clean(self):
+        cleaned_data = super(PanoramaAdminForm, self).clean()
+        initial_tilt = cleaned_data.get("initial_tilt")
+        min_tilt = cleaned_data.get("min_tilt")
+        max_tilt = cleaned_data.get("max_tilt")
+        if initial_tilt:
+          if min_tilt:
+              if min_tilt > initial_tilt:
+                  raise forms.ValidationError("initial tilt must be greater than min_tilt")
+          if max_tilt:           
+              if  max_tilt < initial_tilt:
+                  raise forms.ValidationError("initial tilt must be lower than max_tilt")
+        return cleaned_data
+
+class PanoramaAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['tour', 'directory', 'information']}),
+        ('Initial position', {'fields': ['initial_pan', 'initial_tilt']}),
+        ('Vertical field of view limitation', {'fields': ['min_tilt', 'max_tilt']}),
+    ]
+    form = PanoramaAdminForm
+
 class TourAdmin(admin.ModelAdmin):
     inlines = [PanoramaInline]
 
@@ -38,12 +64,12 @@ class ChainingAdmin(admin.ModelAdmin):
 
 class HotspotInformationAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('', {'fields': ['panorama', 'information']}),
+        (None, {'fields': ['panorama', 'information']}),
         ('Position', {'fields': ['pan', 'tilt']}),
     ]
 
 admin.site.register(Tour, TourAdmin)
-admin.site.register(Panorama)
+admin.site.register(Panorama, PanoramaAdmin)
 admin.site.register(Chaining, ChainingAdmin)
 admin.site.register(InitialPanorama)
 admin.site.register(HotspotInformation, HotspotInformationAdmin)

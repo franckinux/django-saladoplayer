@@ -12,7 +12,7 @@ License : GPL v3 -->
     </global>
     <panoramas>
         {% for panorama in panorama_list %}
-        <panorama id="panorama_id_{{ panorama.id }}" path="{{ saladoplayersettings.url }}/{{ panorama.directory }}/face_f.xml">
+        <panorama id="panorama_id_{{ panorama.id }}" path="{{ saladoplayersettings.url }}/{{ panorama.directory }}/face_f.xml" camera="{% if panorama.pan %}pan:{{ panorama.pan }},{% endif %}{% if panorama.tilt %}tilt:{{ panorama.tilt }},{% endif %}{% if panorama.min_tilt %}minVerticalFov:{{ panorama.min_tilt }},{% endif %}{% if panorama.max_tilt %}maxVerticalFov:{{ panorama.max_tilt }},{% endif %}maxPixelZoom:NaN,minFov:45,maxFov:90">
             {% if hotspot %}
             {% for target in panorama.target_list %}
             <image id="hotspot_panorama_{{ target.id }}" location="pan:{{ target.pan|unlocalize }},tilt:{{ target.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="~hotspots/images/pas_orange_blanc_carre.png"

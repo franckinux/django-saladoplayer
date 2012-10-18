@@ -53,7 +53,11 @@ def xml(request, tour_id, hotspot):
                            'information': panorama.information,
                            'directory': panorama.directory,
                            'target_list': target_list,
-                           'information_list': information_list}
+                           'information_list': information_list,
+                           'pan': panorama.initial_pan,
+                           'tilt': panorama.initial_tilt,
+                           'min_tilt': panorama.min_tilt,
+                           'max_tilt': panorama.max_tilt,}
         panorama_list.append(panorama_config)
 
     return render(request,
