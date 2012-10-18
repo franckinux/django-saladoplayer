@@ -41,6 +41,10 @@ class PanoramaAdmin(admin.ModelAdmin):
 
 class TourAdmin(admin.ModelAdmin):
     inlines = [PanoramaInline]
+    fieldsets = [
+        ('', {'fields': ['title', 'first_panorama']}),
+        ('', {'fields': ['display_dropmenu', 'auto_rotation']}),
+    ]
 
 class ChainingAdminForm(forms.ModelForm):
     class Meta:

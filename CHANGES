@@ -1,9 +1,13 @@
 Version 0.2
 -------------
 
-Released on October 16th, 2012
+Released on October 18th, 2012
 
 * added dropDownMenu feature
+* added initial camera position
+* added vertical angle limitation
+* added auto rotation
+* updated swf saladopayer modules
 
 Version 0.1.2
 -------------

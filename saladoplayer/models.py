@@ -38,7 +38,6 @@ class Tour(models.Model):
     first_panorama = models.ForeignKey('Panorama', 
                                        blank=True, null=True,
                                        related_name='first_panorama')
-    auto_rotation = models.BooleanField()
 
     def __unicode__(self):
         return self.title

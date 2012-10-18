@@ -19,6 +19,6 @@ License : GPL v3 -->
   params.allowfullscreen = "true";
   params.allowscriptaccess = "{% if saladoplayersettings.secure %}"sameDomain"{% else %}always{% endif %}";
   var attributes = {};
-  swfobject.embedSWF("{% get_static_prefix %}SaladoPlayer-1.3.2.swf", "SaladoPlayer", "{{ width }}", "{{ height }}", "10.0.0", "{% get_static_prefix %}embed/expressInstall.swf", flashvars, params, attributes);
+  swfobject.embedSWF("{% get_static_prefix %}SaladoPlayer-1.3.3.swf", "SaladoPlayer", "{{ width }}", "{{ height }}", "10.0.0", "{% get_static_prefix %}embed/expressInstall.swf", flashvars, params, attributes);
 -->
 </script>
