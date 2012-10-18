@@ -35,33 +35,25 @@ def xml(request, tour_id, hotspot):
             chaining = Chaining.objects.get(from_panorama=panorama,
                                             to_panorama=target)
 
-            target_list.append({'pan': chaining.pan,
-                                'tilt': chaining.tilt,
-                                'id': target.id,
-                                'show_information': chaining.show_information})
+            target_list.append({'id': target.id,
+                                'chaining': chaining,
+                               })
 
         # consider each information from the current panorama
         for information in informations:
-            information_list.append({'pan': information.pan,
-                                     'tilt': information.tilt,
-                                     'id': information.id,
-                                     'information': information.information})
+            information_list.append({'information': information,
+                                    })
 
-        panorama_config = {'id': panorama.id,
-                           'information': panorama.information,
-                           'directory': panorama.directory,
+        panorama_config = {'panorama': panorama,
                            'target_list': target_list,
                            'information_list': information_list,
-                           'pan': panorama.initial_pan,
-                           'tilt': panorama.initial_tilt,
-                           'min_tilt': panorama.min_tilt,
-                           'max_tilt': panorama.max_tilt,}
+                          }
         panorama_list.append(panorama_config)
 
     return render(request,
                   'saladoplayer/config.xml',
                   {'tour': tour,
                    'panorama_list': panorama_list,
-                   'first_panorama': first_panorama.id,
-                   'hotspot': hotspot == 'hs' })
+                   'hotspot': hotspot == 'hs',
+                  })
 

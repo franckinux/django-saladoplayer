@@ -6,21 +6,21 @@ License : GPL v3 -->
     <global debug="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}">
         <control autorotation="enabled:false"/>
         <control mouseWheelTrap="true"/>
-        {% if first_panorama %}<panoramas firstPanorama="panorama_id_{{ first_panorama }}"/>{% endif %}
+        {% if tour.first_panorama %}<panoramas firstPanorama="panorama_{{ tour.first_panorama.id }}"/>{% endif %}
         <trace open="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}"/>
         <branding visible="{% if saladoplayersettings.branding %}true{% else %}false{% endif %}"/>
     </global>
     <panoramas>
-        {% for panorama in panorama_list %}
-        <panorama id="panorama_id_{{ panorama.id }}" path="{{ saladoplayersettings.url }}/{{ panorama.directory }}/face_f.xml" camera="{% if panorama.pan %}pan:{{ panorama.pan }},{% endif %}{% if panorama.tilt %}tilt:{{ panorama.tilt }},{% endif %}{% if panorama.min_tilt %}minVerticalFov:{{ panorama.min_tilt }},{% endif %}{% if panorama.max_tilt %}maxVerticalFov:{{ panorama.max_tilt }},{% endif %}maxPixelZoom:NaN,minFov:45,maxFov:90">
+        {% for p in panorama_list %}
+        <panorama id="panorama_{{ p.panorama.id }}" path="{{ saladoplayersettings.url }}/{{ p.panorama.directory }}/face_f.xml" camera="{% if p.panorama.pan %}pan:{{ p.panorama.pan }},{% endif %}{% if p.panorama.tilt %}tilt:{{ p.panorama.tilt }},{% endif %}{% if p.panorama.min_tilt %}minVerticalFov:{{ p.panorama.min_tilt }},{% endif %}{% if p.panorama.max_tilt %}maxVerticalFov:{{ p.panorama.max_tilt }},{% endif %}maxPixelZoom:NaN,minFov:45,maxFov:90">
             {% if hotspot %}
-            {% for target in panorama.target_list %}
-            <image id="hotspot_panorama_{{ target.id }}" location="pan:{{ target.pan|unlocalize }},tilt:{{ target.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="~hotspots/images/pas_orange_blanc_carre.png"
-                   mouse="onClick:loadPano_{{ target.id }}{% if target.show_information %},onOver:showBubbleText_panorama_{{ target.id }},onOut:hideBubble{% endif %}"/>
+            {% for t in p.target_list %}
+            <image id="hotspot_panorama_{{ t.id }}" location="pan:{{ t.chaining.pan|unlocalize }},tilt:{{ t.chaining.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="~hotspots/images/pas_orange_blanc_carre.png"
+                   mouse="onClick:loadPano_{{ t.id }}{% if target.show_information %},onOver:showBubbleText_panorama_{{ t.id }},onOut:hideBubble{% endif %}"/>
             {% endfor %}
-            {% for information in panorama.information_list %}
-            <image id="hotspot_information_{{ information.id }}" location="pan:{{ information.pan|unlocalize }},tilt:{{ information.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="~hotspots/images/info_bleu_blanc_triangle.png"
-                   mouse="onOver:showBubbleText_information_{{ information.id }},onOut:hideBubble"/>
+            {% for i in p.information_list %}
+            <image id="hotspot_information_{{ i.information.id }}" location="pan:{{ i.information.pan|unlocalize }},tilt:{{ i.information.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="~hotspots/images/info_bleu_blanc_triangle.png"
+                   mouse="onOver:showBubbleText_information_{{ i.information.id }},onOut:hideBubble"/>
             {% endfor %}
             {% endif %}
         </panorama>
@@ -47,10 +47,10 @@ License : GPL v3 -->
         {% endif %}
         <InfoBubble path="~modules/InfoBubble-1.3.2.swf">
             <bubbles>
-                {% for panorama in panorama_list %}
-                <text id="bubbleText_panorama_{{ panorama.id }}" text="{{ panorama.information }}"/>
-                {% for information in panorama.information_list %}
-                <text id="bubbleText_information_{{ information.id }}" text="{{ information.information }}"/>
+                {% for p in panorama_list %}
+                <text id="bubbleText_panorama_{{ p.panorama.id }}" text="{{ p.panorama.information }}"/>
+                {% for i in p.panorama.information_list %}
+                <text id="bubbleText_information_{{ i.information.id }}" text="{{ i.information.information }}"/>
                 {% endfor %}
                 {% endfor %}
             </bubbles>
@@ -60,8 +60,8 @@ License : GPL v3 -->
            <window align="horizontal:left,vertical:bottom" move="horizontal:100,vertical:-10"/>
            <box opensUp="true" style="fontSize:14"/>
            <elements>
-              {% for panorama in panorama_list %}
-              <element label="{{ panorama.information }}" target="panorama_id_{{ panorama.id }}"/>
+              {% for p in panorama_list %}
+              <element label="{{ p.panorama.information }}" target="panorama_{{ p.panorama.id }}"/>
               {% endfor %}
            </elements>
         </DropDown> 
@@ -69,11 +69,11 @@ License : GPL v3 -->
     </modules>
     {% if hotspot %}
     <actions>
-        {% for panorama in panorama_list %}
-        <action id="loadPano_{{ panorama.id }}" content="SaladoPlayer.loadPano(panorama_id_{{ panorama.id }})"/>
-        <action id="showBubbleText_panorama_{{ panorama.id }}" content="InfoBubble.show(bubbleText_panorama_{{ panorama.id }})"/>
-        {% for information in panorama.information_list %}
-        <action id="showBubbleText_information_{{ information.id }}" content="InfoBubble.show(bubbleText_information_{{ information.id }})"/>
+        {% for p in panorama_list %}
+        <action id="loadPano_{{ p.panorama.id }}" content="SaladoPlayer.loadPano(panorama_{{ p.panorama.id }})"/>
+        <action id="showBubbleText_panorama_{{ p.panorama.id }}" content="InfoBubble.show(bubbleText_panorama_{{ p.panorama.id }})"/>
+        {% for i in p.information_list %}
+        <action id="showBubbleText_information_{{ i.information.id }}" content="InfoBubble.show(bubbleText_information_{{ i.information.id }})"/>
         {% endfor %}
         {% endfor %}
         <action id="hideBubble" content="InfoBubble.hide()"/>
