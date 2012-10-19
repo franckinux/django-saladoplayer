@@ -88,5 +88,7 @@ class HotspotInformation(models.Model):
     tilt = TiltDecimalField()
 
     def __unicode__(self):
-        return "%s / %s" % (self.panorama.tour.title, self.information)
+        return "%s / %s / %s" % (self.panorama.tour.title, 
+                                 self.panorama.information,
+                                 self.information)
     

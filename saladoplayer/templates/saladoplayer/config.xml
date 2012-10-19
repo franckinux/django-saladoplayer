@@ -16,11 +16,11 @@ License : GPL v3 -->
             {% if hotspot %}
             {% for t in p.target_list %}
             <image id="hotspot_panorama_{{ t.id }}" location="pan:{{ t.chaining.pan|unlocalize }},tilt:{{ t.chaining.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="~hotspots/images/pas_orange_blanc_carre.png"
-                   mouse="onClick:loadPano_{{ t.id }}{% if target.show_information %},onOver:showBubbleText_panorama_{{ t.id }},onOut:hideBubble{% endif %}"/>
+                   mouse="onClick:loadPano_{{ t.id }}{% if t.chaining.show_information %},onOver:showBubbleText_panorama_{{ t.id }},onOut:hideBubble{% endif %}"/>
             {% endfor %}
             {% for i in p.information_list %}
-            <image id="hotspot_information_{{ i.information.id }}" location="pan:{{ i.information.pan|unlocalize }},tilt:{{ i.information.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="~hotspots/images/info_bleu_blanc_triangle.png"
-                   mouse="onOver:showBubbleText_information_{{ i.information.id }},onOut:hideBubble"/>
+            <image id="hotspot_information_{{ i.id }}" location="pan:{{ i.pan|unlocalize }},tilt:{{ i.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="~hotspots/images/info_bleu_blanc_triangle.png"
+                   mouse="onOver:showBubbleText_information_{{ i.id }},onOut:hideBubble"/>
             {% endfor %}
             {% endif %}
         </panorama>
@@ -49,8 +49,8 @@ License : GPL v3 -->
             <bubbles>
                 {% for p in panorama_list %}
                 <text id="bubbleText_panorama_{{ p.panorama.id }}" text="{{ p.panorama.information }}"/>
-                {% for i in p.panorama.information_list %}
-                <text id="bubbleText_information_{{ i.information.id }}" text="{{ i.information.information }}"/>
+                {% for i in p.information_list %}
+                <text id="bubbleText_information_{{ i.id }}" text="{{ i.information }}"/>
                 {% endfor %}
                 {% endfor %}
             </bubbles>
@@ -73,7 +73,7 @@ License : GPL v3 -->
         <action id="loadPano_{{ p.panorama.id }}" content="SaladoPlayer.loadPano(panorama_{{ p.panorama.id }})"/>
         <action id="showBubbleText_panorama_{{ p.panorama.id }}" content="InfoBubble.show(bubbleText_panorama_{{ p.panorama.id }})"/>
         {% for i in p.information_list %}
-        <action id="showBubbleText_information_{{ i.information.id }}" content="InfoBubble.show(bubbleText_information_{{ i.information.id }})"/>
+        <action id="showBubbleText_information_{{ i.id }}" content="InfoBubble.show(bubbleText_information_{{ i.id }})"/>
         {% endfor %}
         {% endfor %}
         <action id="hideBubble" content="InfoBubble.hide()"/>

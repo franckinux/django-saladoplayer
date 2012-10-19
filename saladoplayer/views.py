@@ -23,11 +23,7 @@ def xml(request, tour_id, hotspot):
 
     for panorama in panoramas:
         targets = panorama.panorama_set.all()
-        informations = panorama.hotspotinformation_set.all()
-
-        # init defaults
         target_list = []
-        information_list = []
 
         # consider each target from the current panorama
         for target in targets:
@@ -40,9 +36,7 @@ def xml(request, tour_id, hotspot):
                                })
 
         # consider each information from the current panorama
-        for information in informations:
-            information_list.append({'information': information,
-                                    })
+        information_list = panorama.hotspotinformation_set.all()
 
         panorama_config = {'panorama': panorama,
                            'target_list': target_list,
