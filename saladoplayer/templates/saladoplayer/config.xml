@@ -12,10 +12,10 @@ License : GPL v3 -->
     </global>
     <panoramas>
         {% for p in panorama_list %}
-        <panorama id="panorama_{{ p.panorama.id }}" path="{{ saladoplayersettings.url }}/{{ p.panorama.directory }}/face_f.xml" camera="{% if p.panorama.pan %}pan:{{ p.panorama.pan }},{% endif %}{% if p.panorama.tilt %}tilt:{{ p.panorama.tilt }},{% endif %}{% if p.panorama.min_tilt %}minVerticalFov:{{ p.panorama.min_tilt }},{% endif %}{% if p.panorama.max_tilt %}maxVerticalFov:{{ p.panorama.max_tilt }},{% endif %}maxPixelZoom:NaN,minFov:45,maxFov:90">
+        <panorama id="panorama_{{ p.panorama.id }}" path="{{ saladoplayersettings.url }}/{{ p.panorama.directory }}/face_f.xml" camera="{% if p.panorama.initial_pan %}pan:{{ p.panorama.initial_pan }},{% endif %}{% if p.panorama.initial_tilt %}tilt:{{ p.panorama.initial_tilt }},{% endif %}{% if p.panorama.min_tilt %}minVerticalFov:{{ p.panorama.min_tilt }},{% endif %}{% if p.panorama.max_tilt %}maxVerticalFov:{{ p.panorama.max_tilt }},{% endif %}maxPixelZoom:NaN,minFov:45,maxFov:90"{% if hotspot %} onLeave="hideBubble"{% endif %}>
             {% if hotspot %}
             {% for t in p.target_list %}
-            <image id="hotspot_panorama_{{ t.id }}" location="pan:{{ t.chaining.pan|unlocalize }},tilt:{{ t.chaining.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="~hotspots/images/pas_orange_blanc_carre.png"
+            <image id="hotspot_panorama_{{ p.panorama.id }}_{{ t.id }}" location="pan:{{ t.chaining.pan|unlocalize }},tilt:{{ t.chaining.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="~hotspots/images/pas_orange_blanc_carre.png"
                    mouse="onClick:loadPano_{{ t.id }}{% if t.chaining.show_information %},onOver:showBubbleText_panorama_{{ t.id }},onOut:hideBubble{% endif %}"/>
             {% endfor %}
             {% for i in p.information_list %}
