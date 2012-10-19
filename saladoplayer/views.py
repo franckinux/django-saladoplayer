@@ -12,9 +12,6 @@ def xml(request, tour_id, hotspot):
     """Renders the xml file needed by saladoplayer flash script."""
     tour = get_object_or_404(Tour, pk=tour_id)
 
-    # first panorama in the tour
-    first_panorama = tour.first_panorama
-
     # default values
     panorama_list = []
 
