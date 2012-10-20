@@ -1,5 +1,12 @@
-Version 0.2
+Version 0.2.1
 -------------
+
+Released on October 20th, 2012
+
+* the viewfinder is now avaiable as a field in the tour data model instead of a general configuration
+
+Version 0.2
+-----------
 
 Released on October 19th, 2012
 

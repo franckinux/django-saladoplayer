@@ -34,6 +34,7 @@ class Tour(models.Model):
     """Defines the panoramas in the tour."""
     title = models.CharField(max_length=64)
     display_dropmenu = models.BooleanField()
+    display_viewfinder = models.BooleanField()
     auto_rotation = models.BooleanField()
     first_panorama = models.ForeignKey('Panorama', 
                                        blank=True, null=True,

@@ -42,7 +42,7 @@ License : GPL v3 -->
         <MouseCursor path="~modules/mousecursor/MouseCursor-1.2.swf">
            <settings path="~modules/mousecursor/images/cursors_31x31.png"/>
         </MouseCursor>
-        {% if saladoplayersettings.viewfinder %}
+        {% if tour.display_viewfinder %}
         <ViewFinder path="~modules/ViewFinder-1.3.swf"/>
         {% endif %}
         <InfoBubble path="~modules/InfoBubble-1.3.2.swf">

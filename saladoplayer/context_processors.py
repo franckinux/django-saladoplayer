@@ -12,7 +12,6 @@ def settings(request):
         'saladoplayersettings': {
             'url': proj_settings.SALADOPLAYER_STATIC_URL,
             'debug': proj_settings.SALADOPLAYER_DEBUG,
-            'viewfinder': proj_settings.SALADOPLAYER_VIEWFINDER,
             'secure': proj_settings.SALADOPLAYER_FLASH_SECURE,
             'branding': proj_settings.SALADOPLAYER_SHOW_BRANDING,
         }
