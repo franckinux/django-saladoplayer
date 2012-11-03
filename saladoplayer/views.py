@@ -48,3 +48,8 @@ def xml(request, tour_id, hotspot):
                    'hotspot': hotspot == 'hs',
                   })
 
+def html(request, tour_id, hotspot):
+    return render(request,
+                  'saladoplayer/page.html',
+                  { 'tour_id': tour_id,
+                    'hotspot': hotspot })

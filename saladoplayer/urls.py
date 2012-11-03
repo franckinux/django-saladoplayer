@@ -8,6 +8,6 @@ License : GPL v3"""
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
-
-    url(r'^(?P<tour_id>\d+)/(?P<hotspot>(no)?hs)/$', 'saladoplayer.views.xml'),
+    url(r'^xml/(?P<tour_id>\d+)/(?P<hotspot>(no)?hs)/$', 'saladoplayer.views.xml'),
+    url(r'^html/(?P<tour_id>\d+)/(?P<hotspot>(no)?hs)/$', 'saladoplayer.views.html'),
 )
