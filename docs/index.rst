@@ -17,7 +17,7 @@ Contents:
    templates
    tips
 
-Example : http://fcgi.franck-barbenoire.fr/visite/salle/1/hs/
+Example : http://fcgi.franck-barbenoire.fr/saladoplayer/html/1/hs/
 
 Indices and tables
 ==================
