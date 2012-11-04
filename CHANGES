@@ -1,3 +1,10 @@
+Version 0.2.3
+-------------
+
+Released on November 5th, 2012
+
+* corrected a bug in the many2many relationship between panoramas
+
 Version 0.2.2
 -------------
 

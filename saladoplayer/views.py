@@ -19,27 +19,16 @@ def xml(request, tour_id, hotspot):
     panoramas = tour.panorama_set.all()
 
     for panorama in panoramas:
-        targets = panorama.panorama_set.all()
-        target_list = []
-
-        # consider each target from the current panorama
-        for target in targets:
-            # get extra informations about the link between the panos
-            chaining = Chaining.objects.get(from_panorama=panorama,
-                                            to_panorama=target)
-
-            target_list.append({'id': target.id,
-                                'chaining': chaining,
-                               })
+        # consider all the targets from the current panorama
+        chaining_list = panorama.from_pano.all()
 
         # consider each information from the current panorama
         information_list = panorama.hotspotinformation_set.all()
 
-        panorama_config = {'panorama': panorama,
-                           'target_list': target_list,
-                           'information_list': information_list,
-                          }
-        panorama_list.append(panorama_config)
+        panorama_list.append({'panorama': panorama,
+                              'chaining_list': chaining_list,
+                              'information_list': information_list,
+                             })
 
     return render(request,
                   'saladoplayer/config.xml',

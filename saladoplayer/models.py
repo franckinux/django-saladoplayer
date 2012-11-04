@@ -64,7 +64,7 @@ class Panorama(models.Model):
 class Chaining(models.Model):
     """Defines the link between two panoramas, the source and the destination.
     The show_description boolean decides whether the panorama information must
-    be shown when the cursor os over the hotspot."""
+    be shown when the cursor is over the hotspot."""
     from_panorama = models.ForeignKey('Panorama', related_name='from_pano')
     to_panorama = models.ForeignKey('Panorama', related_name='to_pano')
     show_information = models.BooleanField()

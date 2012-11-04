@@ -17,7 +17,7 @@ Contents:
    templates
    tips
 
-Example : http://fcgi.franck-barbenoire.fr/saladoplayer/html/1/hs/
+Example : http://django-applis.franck-barbenoire.fr/saladoplayer/html/4/hs/
 
 Indices and tables
 ==================
