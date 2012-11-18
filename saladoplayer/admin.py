@@ -33,7 +33,7 @@ class PanoramaAdminForm(forms.ModelForm):
 
 class PanoramaAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['tour', 'directory', 'information']}),
+        ('', {'fields': ['tour', 'directory', 'information']}),
         ('Initial position', {'fields': ['initial_pan', 'initial_tilt']}),
         ('Vertical field of view limitation', {'fields': ['min_tilt', 'max_tilt']}),
     ]
@@ -42,9 +42,10 @@ class PanoramaAdmin(admin.ModelAdmin):
 class TourAdmin(admin.ModelAdmin):
     inlines = [PanoramaInline]
     fieldsets = [
-        ('', {'fields': ['title', 'first_panorama']}),
+        ('', {'fields': ['title', 'title_slug', 'first_panorama']}),
         ('', {'fields': ['display_dropmenu', 'auto_rotation', 'display_viewfinder']}),
     ]
+    prepopulated_fields = {'title_slug': ('title',)}
 
 class ChainingAdminForm(forms.ModelForm):
     class Meta:

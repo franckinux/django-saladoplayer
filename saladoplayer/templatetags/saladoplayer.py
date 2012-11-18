@@ -10,12 +10,12 @@ from django import template
 register = template.Library()
 
 @register.inclusion_tag('saladoplayer/script.html', takes_context=True)
-def saladoplayerscript(context, tour_id, hotspot, width, height):
+def saladoplayerscript(context, tour_slug, width, height, hotspot):
     return {
-        'tour_id': tour_id,
-        'hotspot': hotspot,
+        'tour_slug': tour_slug,
         'width': width,
         'height': height,
+        'hotspot': hotspot,
         'saladoplayersettings': context['saladoplayersettings'],
     }
 

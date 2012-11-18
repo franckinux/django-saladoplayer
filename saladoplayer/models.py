@@ -7,9 +7,10 @@ License : GPL v3"""
 
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.template.defaultfilters import slugify
 
 class AngleDecimalField(models.DecimalField):
-    """Class defining an angular position. It servers as a class base
+    """Class defining an angular position. It serves as a base class
     for both PanDecimalField and TiltDecimalField"""
     def __init__(self, optional, angle, *args, **kwargs):
         kwargs['max_digits'] = 6
@@ -32,10 +33,13 @@ class TiltDecimalField(AngleDecimalField):
 
 class Tour(models.Model):
     """Defines the panoramas in the tour."""
-    title = models.CharField(max_length=64)
+    title = models.CharField(max_length=64, unique=True)
+    title_slug = models.SlugField(max_length=64, unique=True,
+                                  help_text=('A "slug" is a unique URL-friendly title for an object.'))
     display_dropmenu = models.BooleanField()
     display_viewfinder = models.BooleanField()
     auto_rotation = models.BooleanField()
+    #related name is needed otherwise it chashes with tour field of Panorama
     first_panorama = models.ForeignKey('Panorama', 
                                        blank=True, null=True,
                                        related_name='first_panorama')
@@ -43,6 +47,11 @@ class Tour(models.Model):
     def __unicode__(self):
         return self.title
 
+    def save(self, *args, **kwargs):
+        if self.title_slug is None:
+            self.title_slug = slugify(self.title)
+        return super(Tour, self).save(*args, **kwargs)
+ 
 class Panorama(models.Model):
     """Defines the panorama : what tour it belongs to, in what directory
     it lies, how to move to other panoramas and what is the initial

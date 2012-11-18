@@ -8,6 +8,10 @@ License : GPL v3"""
 from django.conf.urls import patterns, url
 
 urlpatterns = patterns('',
-    url(r'^xml/(?P<tour_id>\d+)/(?P<hotspot>(no)?hs)/$', 'saladoplayer.views.xml'),
-    url(r'^html/(?P<tour_id>\d+)/(?P<hotspot>(no)?hs)/$', 'saladoplayer.views.html'),
+    url(r'^xml/(?P<tour_slug>[\w-]+)/((?P<hotspot>(no)?hs)/)?$', 'saladoplayer.views.xml'),
+    url(r'^html/(?P<tour_slug>[\w-]+)/((?P<hotspot>(no)?hs)/)?$', 'saladoplayer.views.html'),
 )
+
+#references
+#http://thefekete.net/blog/slug-urlconf-regex-pattern-for-django-urlpatterns/
+#http://www.regular-expressions.info/optional.html

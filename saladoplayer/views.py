@@ -6,11 +6,14 @@
 License : GPL v3"""
 
 from django.shortcuts import render, get_object_or_404
-from saladoplayer.models import Tour, Chaining
+from saladoplayer.models import Tour
 
-def xml(request, tour_id, hotspot):
+def xml(request, tour_slug, hotspot):
     """Renders the xml file needed by saladoplayer flash script."""
-    tour = get_object_or_404(Tour, pk=tour_id)
+    if hotspot is None:
+        hotspot = 'hs'
+
+    tour = get_object_or_404(Tour, title_slug=tour_slug)
 
     # default values
     panorama_list = []
@@ -37,8 +40,10 @@ def xml(request, tour_id, hotspot):
                    'hotspot': hotspot == 'hs',
                   })
 
-def html(request, tour_id, hotspot):
+def html(request, tour_slug, hotspot):
+    if hotspot is None:
+        hotspot = 'hs'
     return render(request,
                   'saladoplayer/page.html',
-                  { 'tour_id': tour_id,
+                  { 'tour_slug': tour_slug,
                     'hotspot': hotspot })
