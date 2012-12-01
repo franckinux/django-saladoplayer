@@ -23,12 +23,12 @@ class PanoramaAdminForm(forms.ModelForm):
         min_tilt = cleaned_data.get("min_tilt")
         max_tilt = cleaned_data.get("max_tilt")
         if initial_tilt:
-          if min_tilt:
-              if min_tilt > initial_tilt:
-                  raise forms.ValidationError("initial tilt must be greater than min_tilt")
-          if max_tilt:           
-              if  max_tilt < initial_tilt:
-                  raise forms.ValidationError("initial tilt must be lower than max_tilt")
+            if min_tilt:
+                if min_tilt > initial_tilt:
+                    raise forms.ValidationError("initial tilt must be greater than min_tilt")
+            if max_tilt:
+                if  max_tilt < initial_tilt:
+                    raise forms.ValidationError("initial tilt must be lower than max_tilt")
         return cleaned_data
 
 class PanoramaAdmin(admin.ModelAdmin):
@@ -36,6 +36,7 @@ class PanoramaAdmin(admin.ModelAdmin):
         ('', {'fields': ['tour', 'directory', 'information']}),
         ('Initial position', {'fields': ['initial_pan', 'initial_tilt']}),
         ('Vertical field of view limitation', {'fields': ['min_tilt', 'max_tilt']}),
+        ('Photo gallery', {'fields': ['photo_gallery']}),
     ]
     form = PanoramaAdminForm
 

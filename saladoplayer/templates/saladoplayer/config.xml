@@ -22,6 +22,10 @@ License : GPL v3 -->
             <image id="hotspot_information_{{ i.id }}" location="pan:{{ i.pan|unlocalize }},tilt:{{ i.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="~hotspots/images/info_bleu_blanc_triangle.png"
                    mouse="onOver:showBubbleText_information_{{ i.id }},onOut:hideBubble"/>
             {% endfor %}
+            {% for f in p.photo_list %}
+	    <image id="hotspot_image_{{ f.photo.id }}" location="pan:{{ f.pan|unlocalize }},tilt:{{ f.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="~hotspots/images/oeil_jaune_noir_rond.png"
+                   mouse="onClick:showImageButton_{{ f.photo.id }}{% if f.photo.caption %},onOver:showBubbleText_image_{{ f.photo.id }}{% endif %},onOut:hideBubble"/>
+            {% endfor %}
             {% endif %}
         </panorama>
         {% endfor %}
@@ -45,6 +49,7 @@ License : GPL v3 -->
         {% if tour.display_viewfinder %}
         <ViewFinder path="~modules/ViewFinder-1.3.swf"/>
         {% endif %}
+        {% if hotspot %}
         <InfoBubble path="~modules/InfoBubble-1.3.2.swf">
             <bubbles>
                 {% for p in panorama_list %}
@@ -52,17 +57,32 @@ License : GPL v3 -->
                 {% for i in p.information_list %}
                 <text id="bubbleText_information_{{ i.id }}" text="{{ i.information }}"/>
                 {% endfor %}
+                {% for f in p.photo_list %}
+	        {% if f.photo.caption %}
+                <text id="bubbleText_image_{{ f.photo.id }}" text="{{ f.photo.caption }}"/>
+		{% endif %}
+                {% endfor %}
                 {% endfor %}
             </bubbles>
         </InfoBubble>
+        <ImageButton path="~modules/ImageButton-1.3.swf">
+            {% for p in panorama_list %}
+            {% for f in p.photo_list %}
+            <button id="imageButton_{{ f.photo.id }}" path="{{ f.url }}" action="hideImageButton_{{ f.photo.id }}">
+                <window align="vertical:middle,horizontal:center" open="false"/>
+            </button>
+            {% endfor %}
+            {% endfor %}
+        </ImageButton> 
+        {% endif %}
         {% if tour.display_dropmenu %}
         <DropDown path="~modules/DropDown-1.2.swf">
            <window align="horizontal:left,vertical:bottom" move="horizontal:100,vertical:-10"/>
            <box opensUp="true" style="fontSize:14"/>
            <elements>
-              {% for p in panorama_list %}
-              <element label="{{ p.panorama.information }}" target="panorama_{{ p.panorama.id }}"/>
-              {% endfor %}
+               {% for p in panorama_list %}
+               <element label="{{ p.panorama.information }}" target="panorama_{{ p.panorama.id }}"/>
+               {% endfor %}
            </elements>
         </DropDown> 
         {% endif %}
@@ -74,6 +94,13 @@ License : GPL v3 -->
         <action id="showBubbleText_panorama_{{ p.panorama.id }}" content="InfoBubble.show(bubbleText_panorama_{{ p.panorama.id }})"/>
         {% for i in p.information_list %}
         <action id="showBubbleText_information_{{ i.id }}" content="InfoBubble.show(bubbleText_information_{{ i.id }})"/>
+        {% endfor %}
+        {% for f in p.photo_list %}
+        <action id="showImageButton_{{ f.photo.id }}" content="ImageButton.setOpen(imageButton_{{ f.photo.id }},true)"/>
+        <action id="hideImageButton_{{ f.photo.id }}" content="ImageButton.setOpen(imageButton_{{ f.photo.id }},false)"/>
+	{% if f.photo.caption %}
+        <action id="showBubbleText_image_{{ f.photo.id }}" content="InfoBubble.show(bubbleText_image_{{ f.photo.id }})"/>
+	{% endif %}
         {% endfor %}
         {% endfor %}
         <action id="hideBubble" content="InfoBubble.hide()"/>

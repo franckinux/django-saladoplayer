@@ -8,6 +8,7 @@ License : GPL v3"""
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
+from photologue.models import Gallery
 
 class AngleDecimalField(models.DecimalField):
     """Class defining an angular position. It serves as a base class
@@ -15,7 +16,8 @@ class AngleDecimalField(models.DecimalField):
     def __init__(self, optional, angle, *args, **kwargs):
         kwargs['max_digits'] = 6
         kwargs['decimal_places'] = 2
-        kwargs['validators'] = [MinValueValidator(-angle), MaxValueValidator(angle)]
+        kwargs['validators'] = [MinValueValidator(-angle),
+                                MaxValueValidator(angle)]
         if optional:
             kwargs['blank'] = True
             kwargs['null'] = True
@@ -24,18 +26,20 @@ class AngleDecimalField(models.DecimalField):
 class PanDecimalField(AngleDecimalField):
     """Class defining the pan angular position"""
     def __init__(self, optional=False, *args, **kwargs):
-        super(PanDecimalField, self).__init__(optional, angle=180, *args, **kwargs)
+        super(PanDecimalField, self).__init__(optional, angle=180,
+                                              *args, **kwargs)
 
 class TiltDecimalField(AngleDecimalField):
     """Class defining the tilt angular position"""
     def __init__(self, optional=False, *args, **kwargs):
-        super(TiltDecimalField, self).__init__(optional, angle=90, *args, **kwargs)
+        super(TiltDecimalField, self).__init__(optional, angle=90,
+                                               *args, **kwargs)
 
 class Tour(models.Model):
     """Defines the panoramas in the tour."""
     title = models.CharField(max_length=64, unique=True)
     title_slug = models.SlugField(max_length=64, unique=True,
-                                  help_text=('A "slug" is a unique URL-friendly title for an object.'))
+          help_text=('A "slug" is a unique URL-friendly title for an object.'))
     display_dropmenu = models.BooleanField()
     display_viewfinder = models.BooleanField()
     auto_rotation = models.BooleanField()
@@ -66,6 +70,8 @@ class Panorama(models.Model):
     initial_tilt = TiltDecimalField(optional=True)
     min_tilt = TiltDecimalField(optional=True)
     max_tilt = TiltDecimalField(optional=True)
+    photo_gallery = models.ForeignKey(Gallery, 
+                                      blank=True, null=True)
 
     def __unicode__(self):
         return "%s / %s" % (self.tour.title, self.information)
