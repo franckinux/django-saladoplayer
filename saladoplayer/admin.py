@@ -36,7 +36,7 @@ class PanoramaAdmin(admin.ModelAdmin):
         ('', {'fields': ['tour', 'directory', 'information']}),
         ('Initial position', {'fields': ['initial_pan', 'initial_tilt']}),
         ('Vertical field of view limitation', {'fields': ['min_tilt', 'max_tilt']}),
-        ('Photo gallery', {'fields': ['photo_gallery']}),
+        ('Photo gallery', {'fields': ['gallery']}),
     ]
     form = PanoramaAdminForm
 
@@ -45,6 +45,7 @@ class TourAdmin(admin.ModelAdmin):
     fieldsets = [
         ('', {'fields': ['title', 'title_slug', 'first_panorama']}),
         ('', {'fields': ['display_dropmenu', 'auto_rotation', 'display_viewfinder']}),
+        ('Photos galleries', {'fields': ['scroll_menu', 'photo_size']}),
     ]
     prepopulated_fields = {'title_slug': ('title',)}
 
