@@ -13,7 +13,7 @@ You configure your panorama tour by giving all the necessary informations in the
     * **Display viewfinder**. This is a boolean field. It enables the  displaying of the viewfinder (coordinates of the central point). This is useful for finding pan and tilt of the hotspots.
     * **Facebook**. This is a boolean field. It enables metadata to be embedded in the html page. This way you'll have a smart display when the html is spcecified as a target link in Facebook.
     * **Description**. This is a text field. It is mandatory when Facebook is checked. This description will be displayed in the Facebook interface for describing the tour.
-    * **Thumb**. This a reference to an image in Photologue. The thumb image is displayed in Facebook interface when the target link is minimized.
+    * **Thumb**. This a reference to an image in Photologue. A photologue size named "thumbnail" is supposed to exist.The thumb image is displayed in Facebook interface when the target link is minimized.
     * **Height**. This is an Interger field. This is the height of the tour image when the target link is displayed.
     * **Width**. This is an Interger field. This is the width of the tour image when the target link is displayed.
     * **Scroll menu**. This is a boolean field. If true, a scroll menu is displayed in a slide bar at the left of the tour. If you click on an image in the menu, the image rotates to the corresponding hotspot.
