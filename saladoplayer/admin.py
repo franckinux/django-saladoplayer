@@ -58,7 +58,7 @@ class TourAdmin(admin.ModelAdmin):
     fieldsets = [
         ('', {'fields': ['title', 'title_slug', 'first_panorama']}),
         ('Tour options', {'fields': ['display_dropmenu', 'auto_rotation', 'display_viewfinder']}),
-        ('FaceBook metadata', {'fields': ['facebook', 'description', 'thumb']}),
+        ('FaceBook metadata', {'fields': ['facebook', 'description', 'thumb', 'height', 'width']}),
     ]
     prepopulated_fields = {'title_slug': ('title',)}
     form = TourAdminForm

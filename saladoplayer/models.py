@@ -42,6 +42,8 @@ class Tour(models.Model):
     facebook = models.BooleanField()
     description = models.TextField(blank=True)
     thumb = models.CharField(max_length=128, blank=True)
+    height = models.IntegerField(default=600)
+    width = models.IntegerField(default=800)
     #related name is needed otherwise it chashes with tour field of Panorama
     first_panorama = models.ForeignKey('Panorama', 
                                        blank=True, null=True,
