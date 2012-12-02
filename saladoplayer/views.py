@@ -41,9 +41,14 @@ def xml(request, tour_slug, hotspot):
                   })
 
 def html(request, tour_slug, hotspot):
+
     if hotspot is None:
         hotspot = 'hs'
+
+    tour = get_object_or_404(Tour, title_slug=tour_slug)
+
     return render(request,
                   'saladoplayer/page.html',
-                  { 'tour_slug': tour_slug,
-                    'hotspot': hotspot })
+                  {'tour': tour,
+                   'tour_slug': tour_slug,
+                   'hotspot': hotspot })

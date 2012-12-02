@@ -35,10 +35,13 @@ class Tour(models.Model):
     """Defines the panoramas in the tour."""
     title = models.CharField(max_length=64, unique=True)
     title_slug = models.SlugField(max_length=64, unique=True,
-                                  help_text=('A "slug" is a unique URL-friendly title for an object.'))
+          help_text=('A "slug" is a unique URL-friendly title for an object.'))
     display_dropmenu = models.BooleanField()
     display_viewfinder = models.BooleanField()
     auto_rotation = models.BooleanField()
+    facebook = models.BooleanField()
+    description = models.TextField(blank=True)
+    thumb = models.CharField(max_length=128, blank=True)
     #related name is needed otherwise it chashes with tour field of Panorama
     first_panorama = models.ForeignKey('Panorama', 
                                        blank=True, null=True,
@@ -57,7 +60,7 @@ class Panorama(models.Model):
     it lies, how to move to other panoramas and what is the initial
     position of the camera."""
     tour = models.ForeignKey('Tour')
-    directory = models.CharField(max_length=64)
+    directory = models.CharField(max_length=128)
     information = models.CharField(max_length=128)
     chaining = models.ManyToManyField('self',
                                       through='Chaining',
