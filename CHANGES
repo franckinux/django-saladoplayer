@@ -1,3 +1,8 @@
+Version 0.3.0
+-------------
+
+* use django-photologue for managing photos and galleries
+
 Version 0.2.4
 -------------
 

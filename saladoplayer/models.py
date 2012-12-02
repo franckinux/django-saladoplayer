@@ -8,6 +8,7 @@ License : GPL v3"""
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
+from photologue.models import Gallery, Photo, PhotoSize
 
 class AngleDecimalField(models.DecimalField):
     """Class defining an angular position. It serves as a base class
@@ -15,7 +16,8 @@ class AngleDecimalField(models.DecimalField):
     def __init__(self, optional, angle, *args, **kwargs):
         kwargs['max_digits'] = 6
         kwargs['decimal_places'] = 2
-        kwargs['validators'] = [MinValueValidator(-angle), MaxValueValidator(angle)]
+        kwargs['validators'] = [MinValueValidator(-angle),
+                                MaxValueValidator(angle)]
         if optional:
             kwargs['blank'] = True
             kwargs['null'] = True
@@ -24,12 +26,14 @@ class AngleDecimalField(models.DecimalField):
 class PanDecimalField(AngleDecimalField):
     """Class defining the pan angular position"""
     def __init__(self, optional=False, *args, **kwargs):
-        super(PanDecimalField, self).__init__(optional, angle=180, *args, **kwargs)
+        super(PanDecimalField, self).__init__(optional, angle=180,
+                                              *args, **kwargs)
 
 class TiltDecimalField(AngleDecimalField):
     """Class defining the tilt angular position"""
     def __init__(self, optional=False, *args, **kwargs):
-        super(TiltDecimalField, self).__init__(optional, angle=90, *args, **kwargs)
+        super(TiltDecimalField, self).__init__(optional, angle=90,
+                                               *args, **kwargs)
 
 class Tour(models.Model):
     """Defines the panoramas in the tour."""
@@ -41,22 +45,26 @@ class Tour(models.Model):
     auto_rotation = models.BooleanField()
     facebook = models.BooleanField()
     description = models.TextField(blank=True)
-    thumb = models.CharField(max_length=128, blank=True)
+    thumb = models.ForeignKey(Photo, 
+                                blank=True, null=True)
     height = models.IntegerField(default=600)
     width = models.IntegerField(default=800)
-    #related name is needed otherwise it chashes with tour field of Panorama
+    #related name is needed for firstPanorama
     first_panorama = models.ForeignKey('Panorama', 
                                        blank=True, null=True,
                                        related_name='first_panorama')
-
-    def __unicode__(self):
-        return self.title
+    scroll_menu = models.BooleanField()
+    photo_size = models.ForeignKey(PhotoSize,
+                                   blank=True, null=True)
 
     def save(self, *args, **kwargs):
         if self.title_slug is None:
             self.title_slug = slugify(self.title)
         return super(Tour, self).save(*args, **kwargs)
  
+    def __unicode__(self):
+        return self.title
+
 class Panorama(models.Model):
     """Defines the panorama : what tour it belongs to, in what directory
     it lies, how to move to other panoramas and what is the initial
@@ -71,6 +79,8 @@ class Panorama(models.Model):
     initial_tilt = TiltDecimalField(optional=True)
     min_tilt = TiltDecimalField(optional=True)
     max_tilt = TiltDecimalField(optional=True)
+    gallery = models.ForeignKey(Gallery, 
+                                blank=True, null=True)
 
     def __unicode__(self):
         return "%s / %s" % (self.tour.title, self.information)

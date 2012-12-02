@@ -9,7 +9,7 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(name = "django-saladoplayer",
-    version = "0.2.4",
+    version = "0.3.0",
     description = "Django application for displaying spherical panoramas using SaladoPlayer flash viewer",
     author = "Franck Barbenoire",
     author_email = "fbarbenoire@yahoo.fr",
@@ -17,6 +17,7 @@ setup(name = "django-saladoplayer",
     packages = find_packages(),
     include_package_data = True,
     zip_safe = False,
+    install_requires = ["django-photologue >= 2.4",],
     classifiers = ['Development Status :: 4 - Beta',
                    'License :: OSI Approved :: GNU General Public License (GPL)',
                    'Programming Language :: Python :: 2.6',
