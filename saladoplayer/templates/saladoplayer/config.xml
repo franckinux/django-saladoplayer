@@ -1,7 +1,7 @@
 <!-- (C) Franck Barbenoire <fbarbenoire@yahoo.fr>
 License : GPL v3 -->
 <?xml version="1.0" encoding="utf-8"?>
-{% load l10n %}
+{% load l10n %}{% load photos %}
 <SaladoPlayer>
     <global debug="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}">
         <control autorotation="enabled:{% if tour.auto_rotation %}true{% else %}false{% endif %},delay:10"/>
@@ -12,18 +12,18 @@ License : GPL v3 -->
     </global>
     <panoramas>
         {% for p in panorama_list %}
-        <panorama id="panorama_{{ p.panorama.id }}" path="{{ saladoplayersettings.url }}/{{ p.panorama.directory }}/face_f.xml" camera="{% if p.panorama.initial_pan %}pan:{{ p.panorama.initial_pan }},{% endif %}{% if p.panorama.initial_tilt %}tilt:{{ p.panorama.initial_tilt }},{% endif %}{% if p.panorama.min_tilt %}minVerticalFov:{{ p.panorama.min_tilt }},{% endif %}{% if p.panorama.max_tilt %}maxVerticalFov:{{ p.panorama.max_tilt }},{% endif %}maxPixelZoom:NaN,minFov:45,maxFov:90"{% if hotspot %} onLeave="hideBubble"{% endif %}{% if tour.scroll_menu %} onEnter="setGroup_{{ p.panorama.id }}"{% endif %}>
+        <panorama id="panorama_{{ p.panorama.id }}" path="{{ saladoplayersettings.url }}/{{ p.panorama.directory }}/face_f.xml" camera="{% if p.panorama.initial_pan %}pan:{{ p.panorama.initial_pan }},{% endif %}{% if p.panorama.initial_tilt %}tilt:{{ p.panorama.initial_tilt }},{% endif %}{% if p.panorama.min_tilt %}minVerticalFov:{{ p.panorama.min_tilt }},{% endif %}{% if p.panorama.max_tilt %}maxVerticalFov:{{ p.panorama.max_tilt }},{% endif %}maxPixelZoom:NaN,minFov:45,maxFov:90"{% if hotspot %} onLeave="hideBubble"{% endif %}{% if tour.scrollmenu %} onEnter="setGroup_{{ p.panorama.id }}"{% endif %}>
             {% if hotspot %}
             {% for c in p.chaining_list %}
-            <image id="hotspot_panorama_{{ p.panorama.id }}_{{ c.to_panorama.id }}" location="pan:{{ c.pan|unlocalize }},tilt:{{ c.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="~hotspots/images/pas_orange_blanc_carre.png"
+            <image id="hotspot_panorama_{{ p.panorama.id }}_{{ c.to_panorama.id }}" location="pan:{{ c.pan|unlocalize }},tilt:{{ c.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="{% photo_url 'goto'%}"
                    mouse="onClick:loadPano_{{ c.to_panorama.id }}{% if c.show_information %},onOver:showBubbleText_panorama_{{ c.to_panorama.id }},onOut:hideBubble{% endif %}"/>
             {% endfor %}
             {% for i in p.information_list %}
-            <image id="hotspot_information_{{ i.id }}" location="pan:{{ i.pan|unlocalize }},tilt:{{ i.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="~hotspots/images/info_bleu_blanc_triangle.png"
+            <image id="hotspot_information_{{ i.id }}" location="pan:{{ i.pan|unlocalize }},tilt:{{ i.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'info'%}"
                    mouse="onOver:showBubbleText_information_{{ i.id }},onOut:hideBubble"/>
             {% endfor %}
             {% for f in p.photo_list %}
-            <image id="hotspot_image_{{ f.photo.id }}" location="pan:{{ f.pan|unlocalize }},tilt:{{ f.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="~hotspots/images/oeil_jaune_noir_rond.png"
+            <image id="hotspot_image_{{ f.photo.id }}" location="pan:{{ f.pan|unlocalize }},tilt:{{ f.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'see'%}"
                    mouse="onClick:showImageButton_{{ f.photo.id }},onOver:showBubbleText_image_{{ f.photo.id }},onOut:hideBubble"/>
             {% endfor %}
             {% endif %}
@@ -37,8 +37,10 @@ License : GPL v3 -->
                <button name="down"/>
                <button name="left"/>
                <button name="right"/>
+               {% if not tour.zoomslider %}
                <button name="in"/>
                <button name="out"/>
+               {% endif %}
                <button name="drag"/>
                <button name="fullscreen"/>
             </buttons>
@@ -46,7 +48,7 @@ License : GPL v3 -->
         <MouseCursor path="~modules/mousecursor/MouseCursor-1.2.swf">
            <settings path="~modules/mousecursor/images/cursors_31x31.png"/>
         </MouseCursor>
-        {% if tour.scroll_menu %}
+        {% if tour.scrollmenu %}
         <MenuScroller path="~modules/menuscroller/MenuScroller-1.3.1.swf">
             <window open="false" onOpen="onMenuOpen" onClose="onMenuClose" openTween="time:0.5" closeTween="time:0.5"/>
             <close path="~modules/menuscroller/images/ms_close.png" align="vertical:middle" move="horizontal:60"/>
@@ -61,7 +63,7 @@ License : GPL v3 -->
             </groups>
          </MenuScroller>
         {% endif %}
-        {% if tour.display_viewfinder %}
+        {% if tour.viewfinder %}
         <ViewFinder path="~modules/ViewFinder-1.3.swf"/>
         {% endif %}
         {% if hotspot %}
@@ -86,23 +88,31 @@ License : GPL v3 -->
             </button>
             {% endfor %}
             {% endfor %}
-            {% if tour.scroll_menu %}
+            {% if tour.scrollmenu %}
             <button id="buttonMenu" path="~modules/menuscroller/images/ms_open.png" action="openMenu">
                 <window align="vertical:middle,horizontal:left" move="horizontal:0,vertical:0" openTween="time:0" closeTween="time:0" />
             </button>
             {% endif %}
         </ImageButton> 
         {% endif %}
-        {% if tour.display_dropmenu %}
-        <DropDown path="~modules/DropDown-1.2.swf">
-           <window align="horizontal:left,vertical:bottom" move="horizontal:100,vertical:-10"/>
-           <box opensUp="true" style="fontSize:14"/>
-           <elements>
-               {% for p in panorama_list %}
-               <element label="{{ p.panorama.information }}" target="panorama_{{ p.panorama.id }}"/>
-               {% endfor %}
-           </elements>
+        {% if tour.dropmenu %}
+        <DropDown path="~modules/DropDown-1.3.swf">
+           <window align="horizontal:left,vertical:bottom" move="horizontal:300,vertical:-10"/>
+           <settings opensUp="true" style="fontSize:14"/>
+           <groups>
+               <group id="group">
+                   {% for p in panorama_list %}
+                   <element label="{{ p.panorama.information }}" target="panorama_{{ p.panorama.id }}"/>
+                   {% endfor %}
+	       </group>
+           </groups>
         </DropDown> 
+        {% endif %}
+        {% if tour.zoomslider %}
+        <ZoomSlider path="~modules/zoomslider/ZoomSlider-1.2.swf">
+            <window align="horizontal:right,vertical:middle"/>
+            <slider path="~modules/zoomslider/images/elements_dark_40x40.png" slidesVertical="true" minLength="200" maxLength="600"/>
+        </ZoomSlider> 
         {% endif %}
     </modules>
     {% if hotspot %}
@@ -110,7 +120,7 @@ License : GPL v3 -->
         {% for p in panorama_list %}
         <action id="loadPano_{{ p.panorama.id }}" content="SaladoPlayer.loadPano(panorama_{{ p.panorama.id }})"/>
         <action id="showBubbleText_panorama_{{ p.panorama.id }}" content="InfoBubble.show(bubbleText_panorama_{{ p.panorama.id }})"/>
-        {% if tour.scroll_menu %}
+        {% if tour.scrollmenu %}
         <action id="setGroup_{{ p.panorama.id }}" content="MenuScroller.setGroup(menuScrollerGroup_{{ p.panorama.id }})"/>
         {% endif %}
         {% for i in p.information_list %}
@@ -120,13 +130,13 @@ License : GPL v3 -->
         <action id="showImageButton_{{ f.photo.id }}" content="ImageButton.setOpen(imageButton_{{ f.photo.id }},true)"/>
         <action id="hideImageButton_{{ f.photo.id }}" content="ImageButton.setOpen(imageButton_{{ f.photo.id }},false)"/>
         <action id="showBubbleText_image_{{ f.photo.id }}" content="InfoBubble.show(bubbleText_image_{{ f.photo.id }})"/>
-        {% if tour.scroll_menu %}
+        {% if tour.scrollmenu %}
         <action id="moveTo_{{ f.photo.id }}" content="SaladoPlayer.moveToHotspotThen(hotspot_image_{{ f.photo.id }},90,zoomHotspot)"/>
         {% endif %}
         {% endfor %}
         {% endfor %}
         <action id="hideBubble" content="InfoBubble.hide()"/>
-        {% if tour.scroll_menu %}
+        {% if tour.scrollmenu %}
         <action id="onMenuOpen" content="ImageButton.setOpen(buttonMenu,false)"/>
         <action id="onMenuClose" content="SaladoPlayer.waitThen(0.5,openButtonMenu)"/>
         <action id="openButtonMenu" content="ImageButton.setOpen(buttonMenu,true)"/>

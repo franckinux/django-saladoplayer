@@ -58,8 +58,8 @@ class TourAdmin(admin.ModelAdmin):
     inlines = [PanoramaInline]
     fieldsets = [
         ('', {'fields': ['title', 'title_slug', 'first_panorama']}),
-        ('Tour options', {'fields': ['display_dropmenu', 'auto_rotation', 'display_viewfinder']}),
-        ('Photos galleries', {'fields': ['scroll_menu', 'photo_size']}),
+        ('Tour options', {'fields': ['dropmenu', 'auto_rotation', 'zoomslider', 'viewfinder']}),
+        ('Photos galleries', {'fields': ['scrollmenu', 'photo_size']}),
         ('FaceBook metadata', {'fields': ['facebook', 'description', 'thumb', 'height', 'width']}),
     ]
     prepopulated_fields = {'title_slug': ('title',)}

@@ -26,7 +26,13 @@ The SaladoPlayer application does not require any other application to be instal
     * SALADOPLAYER_STATIC_URL. This is a string value. Its value is the panorama url root.
     * SALADOPLAYER_SHOW_BRANDING. This is a boolean value. When it is True, the text "Powered by SaladoPlayer" is displayed otherwise, it is not.
 
-* create the saladoplayer database by running the following command in your project root directory::
+* create the applications database by running the following commands in your project root directory::
 
     $ python manage.py syncdb
+    $ python manage.py migrate
+    $ python manage.py plinit
+    $ python manage.py spinit
 
+plinit configures the Photologue application database. Create the "thumbnail" and "display" sizes, they will be used by Saladoplayer.
+
+spinit configures the SaladoPlayer application database. It checks that you have created the above sizes in Photologue. It also creates a Photologue gallery named "saladoplayer" and inserts 3 hotspot images. You can change the images to redefine the hotspot images. There is currently 3 images named "see", "goto" and "info". You have to use the same names.

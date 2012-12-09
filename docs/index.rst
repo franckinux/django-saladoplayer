@@ -15,6 +15,7 @@ Contents:
    installation
    configuration
    templates
+   screenshots
    tips
 
 Example : http://django-applis.franck-barbenoire.fr/saladoplayer/html/4/hs/

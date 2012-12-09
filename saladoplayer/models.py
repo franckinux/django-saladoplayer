@@ -40,8 +40,10 @@ class Tour(models.Model):
     title = models.CharField(max_length=64, unique=True)
     title_slug = models.SlugField(max_length=64, unique=True,
           help_text=('A "slug" is a unique URL-friendly title for an object.'))
-    display_dropmenu = models.BooleanField()
-    display_viewfinder = models.BooleanField()
+    dropmenu = models.BooleanField()
+    viewfinder = models.BooleanField()
+    scrollmenu = models.BooleanField()
+    zoomslider = models.BooleanField()
     auto_rotation = models.BooleanField()
     facebook = models.BooleanField()
     description = models.TextField(blank=True)
@@ -53,7 +55,6 @@ class Tour(models.Model):
     first_panorama = models.ForeignKey('Panorama', 
                                        blank=True, null=True,
                                        related_name='first_panorama')
-    scroll_menu = models.BooleanField()
     photo_size = models.ForeignKey(PhotoSize,
                                    blank=True, null=True)
 

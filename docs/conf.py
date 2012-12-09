@@ -186,7 +186,7 @@ latex_elements = {
 # (source start file, target name, title, author, documentclass [howto/manual]).
 latex_documents = [
   ('index', 'django-saladoplayer.tex', u'django-saladoplayer Documentation',
-   u'FRanck Barbenoire', 'manual'),
+   u'Franck Barbenoire', 'manual'),
 ]
 
 # The name of an image file (relative to this directory) to place at the top of
@@ -216,7 +216,7 @@ latex_documents = [
 # (source start file, name, description, authors, manual section).
 man_pages = [
     ('index', 'django-saladoplayer', u'django-saladoplayer Documentation',
-     [u'FRanck Barbenoire'], 1)
+     [u'Franck Barbenoire'], 1)
 ]
 
 # If true, show URL addresses after external links.
@@ -230,7 +230,7 @@ man_pages = [
 #  dir menu entry, description, category)
 texinfo_documents = [
   ('index', 'django-saladoplayer', u'django-saladoplayer Documentation',
-   u'FRanck Barbenoire', 'django-saladoplayer', 'One line description of project.',
+   u'Franck Barbenoire', 'django-saladoplayer', 'One line description of project.',
    'Miscellaneous'),
 ]
 
