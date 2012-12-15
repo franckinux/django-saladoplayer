@@ -24,7 +24,7 @@ License : GPL v3 -->
             {% endfor %}
             {% for f in p.photo_list %}
             <image id="hotspot_image_{{ f.photo.id }}" location="pan:{{ f.pan|unlocalize }},tilt:{{ f.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'see'%}"
-                   mouse="onClick:showImageButton_{{ f.photo.id }},onOver:showBubbleText_image_{{ f.photo.id }},onOut:hideBubble"/>
+                   mouse="onClick:{% if tour.gallery %}showGallery_{{ p.panorama.id }}{% else %}showImageButton_{{ f.photo.id }}{% endif %},onOver:showBubbleText_image_{{ f.photo.id }},onOut:hideBubble"/>
             {% endfor %}
             {% endif %}
         </panorama>
@@ -80,7 +80,23 @@ License : GPL v3 -->
                 {% endfor %}
             </bubbles>
         </InfoBubble>
+        {% if tour.gallery %}
+        <ImageGallery path="~modules/imagegallery/ImageGallery-1.0.swf">
+            <viewer path="~modules/imagegallery/images/buttons_dark_40x40.png" throbber="~modules/imagegallery/images/throbber-circles.gif" style="alpha:0.7"/>
+            <close path="~modules/imagegallery/images//close.png" move="vertical:-10,horizontal:10"/>
+            <groups>
+                {% for p in panorama_list %}
+                <group id="galleryGroup_{{ p.panorama.id }}">
+                    {% for f in p.photo_list %}
+                    <image path="{{ f.url }}"/>
+                    {% endfor %}
+                </group>
+                {% endfor %}
+            </groups>
+        </ImageGallery>
+        {% endif %}{# tour.gallery #}
         <ImageButton path="~modules/ImageButton-1.3.swf">
+            {% if not tour.gallery %}
             {% for p in panorama_list %}
             {% for f in p.photo_list %}
             <button id="imageButton_{{ f.photo.id }}" path="{{ f.url }}" action="hideImageButton_{{ f.photo.id }}">
@@ -88,13 +104,14 @@ License : GPL v3 -->
             </button>
             {% endfor %}
             {% endfor %}
+            {% endif %}{# tour.gallery #}
             {% if tour.scrollmenu %}
             <button id="buttonMenu" path="~modules/menuscroller/images/ms_open.png" action="openMenu">
                 <window align="vertical:middle,horizontal:left" move="horizontal:0,vertical:0" openTween="time:0" closeTween="time:0" />
             </button>
             {% endif %}
         </ImageButton> 
-        {% endif %}
+        {% endif %}{# hotspot #}
         {% if tour.dropmenu %}
         <DropDown path="~modules/DropDown-1.3.swf">
            <window align="horizontal:left,vertical:bottom" move="horizontal:300,vertical:-10"/>
@@ -123,18 +140,23 @@ License : GPL v3 -->
         {% if tour.scrollmenu %}
         <action id="setGroup_{{ p.panorama.id }}" content="MenuScroller.setGroup(menuScrollerGroup_{{ p.panorama.id }})"/>
         {% endif %}
+        {% if tour.gallery %}
+        <action id="showGallery_{{ p.panorama.id }}" content="ImageGallery.setOpen(true);ImageGallery.setGroup(galleryGroup_{{ p.panorama.id }})"/>
+	{% endif %}
         {% for i in p.information_list %}
         <action id="showBubbleText_information_{{ i.id }}" content="InfoBubble.show(bubbleText_information_{{ i.id }})"/>
         {% endfor %}
         {% for f in p.photo_list %}
+        {% if not tour.gallery %}
         <action id="showImageButton_{{ f.photo.id }}" content="ImageButton.setOpen(imageButton_{{ f.photo.id }},true)"/>
         <action id="hideImageButton_{{ f.photo.id }}" content="ImageButton.setOpen(imageButton_{{ f.photo.id }},false)"/>
+        {% endif %}
         <action id="showBubbleText_image_{{ f.photo.id }}" content="InfoBubble.show(bubbleText_image_{{ f.photo.id }})"/>
         {% if tour.scrollmenu %}
         <action id="moveTo_{{ f.photo.id }}" content="SaladoPlayer.moveToHotspotThen(hotspot_image_{{ f.photo.id }},90,zoomHotspot)"/>
         {% endif %}
-        {% endfor %}
-        {% endfor %}
+        {% endfor %}{# f in p.photo_list #}
+        {% endfor %}{# p in panorama_list #}
         <action id="hideBubble" content="InfoBubble.hide()"/>
         {% if tour.scrollmenu %}
         <action id="onMenuOpen" content="ImageButton.setOpen(buttonMenu,false)"/>
@@ -143,7 +165,7 @@ License : GPL v3 -->
         <action id="openMenu" content="MenuScroller.setOpen(true)"/>
         <action id="closeMenu" content="MenuScroller.setOpen(false)"/>
         <action id="zoomHotspot" content="SaladoPlayer.moveToView(NaN,NaN,40)"/>
-        {% endif %}
+        {% endif %}{# tour.scrollmenu #}
     </actions>
     {% endif%}
 </SaladoPlayer>

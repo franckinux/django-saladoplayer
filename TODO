@@ -1,8 +1,7 @@
 - in admin interface, choose source and target within the same tour.
-- choose hotspots images from a Gallery.
 - find a way for scaling hotspot images.
 - find a better way for getting pan & tilt of images. currently in the title of the photo.
 - use a photologue size (predefined thumb size ?) for the facebook thumb image.
-- use the saladoplayer gallery module for displaying galleries.
 - make previous image disappear when a new one pops up.
-- put scrennshots in the doc
+- identify what SaladoPlayer modules can be integrated (flare, link ?).
+

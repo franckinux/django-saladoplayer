@@ -39,16 +39,17 @@ class Tour(models.Model):
     """Defines the panoramas in the tour."""
     title = models.CharField(max_length=64, unique=True)
     title_slug = models.SlugField(max_length=64, unique=True,
-          help_text=('A "slug" is a unique URL-friendly title for an object.'))
+          help_text=('A "slug" is a unique URL-friendly title for an object'))
     dropmenu = models.BooleanField()
     viewfinder = models.BooleanField()
     scrollmenu = models.BooleanField()
+    gallery = models.BooleanField(verbose_name=('Photos display interface'))
     zoomslider = models.BooleanField()
     auto_rotation = models.BooleanField()
     facebook = models.BooleanField()
     description = models.TextField(blank=True)
     thumb = models.ForeignKey(Photo, 
-                                blank=True, null=True)
+                              blank=True, null=True)
     height = models.IntegerField(default=600)
     width = models.IntegerField(default=800)
     #related name is needed for firstPanorama

@@ -6,7 +6,7 @@ Franck Barbenoire <fbarbenoire@yahoo.fr>
 Software version
 ================
 
-Version 0.3.0, December 2nd, 2012.
+Version 0.3.1, December 15th, 2012.
 
 License
 =======
@@ -37,4 +37,4 @@ In the open source world, you can use `Python Deep Zoom Tools <https://github.co
 Required packages
 =================
 
-From version 0.3.0, django-photologue is required. For those who do not want to install extra packages, django-saladoplayer-0.2.4 will be still available but without the image and scroll menu features.
+From version 0.3.0, django-photologue is required (and of course Photologue dependences). For those who do not want to install extra packages, django-saladoplayer-0.2.4 will be still available but without the image and scroll menu features.

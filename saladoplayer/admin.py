@@ -7,7 +7,12 @@ License : GPL v3"""
 
 from django.contrib import admin
 from django import forms
+from django.utils.safestring import mark_safe
 from saladoplayer.models import Tour, Panorama, Chaining, HotspotInformation
+
+class HorizontalRadioRenderer(forms.RadioSelect.renderer):
+  def render(self):
+    return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
 
 class PanoramaInline(admin.TabularInline):
     model = Panorama
@@ -34,8 +39,8 @@ class PanoramaAdminForm(forms.ModelForm):
 class PanoramaAdmin(admin.ModelAdmin):
     fieldsets = [
         ('', {'fields': ['tour', 'directory', 'information']}),
-        ('Initial position', {'fields': ['initial_pan', 'initial_tilt']}),
-        ('Vertical field of view limitation', {'fields': ['min_tilt', 'max_tilt']}),
+        ('Initial position', {'fields': [('initial_pan', 'initial_tilt')]}),
+        ('Vertical field of view limitation', {'fields': [('min_tilt', 'max_tilt')]}),
         ('Photo gallery', {'fields': ['gallery']}),
     ]
     form = PanoramaAdminForm
@@ -43,7 +48,11 @@ class PanoramaAdmin(admin.ModelAdmin):
 class TourAdminForm(forms.ModelForm):
     class Meta:
         model = Tour
-
+        widgets = {'gallery': forms.RadioSelect(
+                                 choices=((True, 'Gallery'),
+                                          (False, 'Image button')),
+                                 renderer=HorizontalRadioRenderer)}
+    
     def clean(self):
         cleaned_data = super(TourAdminForm, self).clean()
         facebook = cleaned_data.get("facebook")
@@ -58,9 +67,9 @@ class TourAdmin(admin.ModelAdmin):
     inlines = [PanoramaInline]
     fieldsets = [
         ('', {'fields': ['title', 'title_slug', 'first_panorama']}),
-        ('Tour options', {'fields': ['dropmenu', 'auto_rotation', 'zoomslider', 'viewfinder']}),
-        ('Photos galleries', {'fields': ['scrollmenu', 'photo_size']}),
-        ('FaceBook metadata', {'fields': ['facebook', 'description', 'thumb', 'height', 'width']}),
+        ('Tour options', {'fields': [('dropmenu', 'auto_rotation', 'zoomslider', 'viewfinder')]}),
+        ('Photos galleries', {'fields': ['scrollmenu', 'photo_size', 'gallery']}),
+        ('FaceBook metadata', {'fields': ['facebook', 'description', 'thumb', ('height', 'width')]}),
     ]
     prepopulated_fields = {'title_slug': ('title',)}
     form = TourAdminForm
@@ -82,7 +91,7 @@ class ChainingAdminForm(forms.ModelForm):
 class ChainingAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Panorama chaining', {'fields': ['from_panorama', 'to_panorama']}),
-        ('Position', {'fields': ['pan', 'tilt']}),
+        ('Position', {'fields': [('pan', 'tilt')]}),
         ('Options', {'fields': ['show_information']}),
     ]
     form = ChainingAdminForm
@@ -90,7 +99,7 @@ class ChainingAdmin(admin.ModelAdmin):
 class HotspotInformationAdmin(admin.ModelAdmin):
     fieldsets = [
         (None, {'fields': ['panorama', 'information']}),
-        ('Position', {'fields': ['pan', 'tilt']}),
+        ('Position', {'fields': [('pan', 'tilt')]}),
     ]
 
 admin.site.register(Tour, TourAdmin)

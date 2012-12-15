@@ -1,13 +1,15 @@
 Version 0.3.1
 -------------
 
-Released on December ?th, 2012
+Released on December 15th, 2012
 
+* display photo galleries using SaladoPlayer module Gallery and the Django application Photologue
+* take the hotspot images from a Photologue gallery
+* add a management command (spinit) for initializing Django-saladoplayer (automatically create the above gallery)
 * use the zoom slider module
 * add screen shots in the documentation
 * update the documentation
 * update the SaladoPlayer modules
-* take the hotspot images from a Photologue gallery
 
 Version 0.3.0
 -------------
