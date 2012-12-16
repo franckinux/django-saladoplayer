@@ -15,17 +15,22 @@ License : GPL v3 -->
         <panorama id="panorama_{{ p.panorama.id }}" path="{{ saladoplayersettings.url }}/{{ p.panorama.directory }}/face_f.xml" camera="{% if p.panorama.initial_pan %}pan:{{ p.panorama.initial_pan }},{% endif %}{% if p.panorama.initial_tilt %}tilt:{{ p.panorama.initial_tilt }},{% endif %}{% if p.panorama.min_tilt %}minVerticalFov:{{ p.panorama.min_tilt }},{% endif %}{% if p.panorama.max_tilt %}maxVerticalFov:{{ p.panorama.max_tilt }},{% endif %}maxPixelZoom:NaN,minFov:45,maxFov:90"{% if hotspot %} onLeave="hideBubble"{% endif %}{% if tour.scrollmenu %} onEnter="setGroup_{{ p.panorama.id }}"{% endif %}>
             {% if hotspot %}
             {% for c in p.chaining_list %}
-            <image id="hotspot_panorama_{{ p.panorama.id }}_{{ c.to_panorama.id }}" location="pan:{{ c.pan|unlocalize }},tilt:{{ c.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="{% photo_url 'goto'%}"
+            <image id="hotspot_panorama_{{ p.panorama.id }}_{{ c.to_panorama.id }}" location="pan:{{ c.pan|unlocalize }},tilt:{{ c.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="{% photo_url 'goto' %}"
                    mouse="onClick:loadPano_{{ c.to_panorama.id }}{% if c.show_information %},onOver:showBubbleText_panorama_{{ c.to_panorama.id }},onOut:hideBubble{% endif %}"/>
             {% endfor %}
             {% for i in p.information_list %}
-            <image id="hotspot_information_{{ i.id }}" location="pan:{{ i.pan|unlocalize }},tilt:{{ i.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'info'%}"
+            <image id="hotspot_information_{{ i.id }}" location="pan:{{ i.pan|unlocalize }},tilt:{{ i.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'info' %}"
                    mouse="onOver:showBubbleText_information_{{ i.id }},onOut:hideBubble"/>
             {% endfor %}
             {% for f in p.photo_list %}
-            <image id="hotspot_image_{{ f.photo.id }}" location="pan:{{ f.pan|unlocalize }},tilt:{{ f.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'see'%}"
+            <image id="hotspot_image_{{ f.photo.id }}" location="pan:{{ f.pan|unlocalize }},tilt:{{ f.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'see' %}"
                    mouse="onClick:{% if tour.gallery %}showGallery_{{ p.panorama.id }}{% else %}showImageButton_{{ f.photo.id }}{% endif %},onOver:showBubbleText_image_{{ f.photo.id }},onOut:hideBubble"/>
             {% endfor %}
+            {% endif %}
+            {% if tour.nadir %}
+            <swf id="nadir_{{ p.panorama.id }}" location="tilt:-90" path="~modules/NadirSpot-1.0.swf" handCursor="false">
+                <settings path="{{ MEDIA_URL }}{{ tour.nadir.image.name }}"/>
+            </swf>
             {% endif %}
         </panorama>
         {% endfor %}

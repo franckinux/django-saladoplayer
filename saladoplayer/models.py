@@ -43,21 +43,24 @@ class Tour(models.Model):
     dropmenu = models.BooleanField()
     viewfinder = models.BooleanField()
     scrollmenu = models.BooleanField()
-    gallery = models.BooleanField(verbose_name=('Photos display interface'))
+    gallery = models.BooleanField(verbose_name=('Photo display interface'))
     zoomslider = models.BooleanField()
     auto_rotation = models.BooleanField()
     facebook = models.BooleanField()
     description = models.TextField(blank=True)
     thumb = models.ForeignKey(Photo, 
-                              blank=True, null=True)
+                              blank=True, null=True,
+                              related_name='thumb')
     height = models.IntegerField(default=600)
     width = models.IntegerField(default=800)
-    #related name is needed for firstPanorama
     first_panorama = models.ForeignKey('Panorama', 
                                        blank=True, null=True,
                                        related_name='first_panorama')
     photo_size = models.ForeignKey(PhotoSize,
                                    blank=True, null=True)
+    nadir = models.ForeignKey(Photo, 
+                              blank=True, null=True,
+                              related_name='nadir')
 
     def save(self, *args, **kwargs):
         if self.title_slug is None:
