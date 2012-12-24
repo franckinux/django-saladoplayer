@@ -46,6 +46,7 @@ class Tour(models.Model):
     gallery = models.BooleanField(verbose_name=('Photo display interface'))
     zoomslider = models.BooleanField()
     auto_rotation = models.BooleanField()
+    full_screener = models.BooleanField()
     facebook = models.BooleanField()
     description = models.TextField(blank=True)
     thumb = models.ForeignKey(Photo, 
@@ -121,4 +122,14 @@ class HotspotInformation(models.Model):
         return "%s / %s / %s" % (self.panorama.tour.title, 
                                  self.panorama.information,
                                  self.information)
-    
+
+class Link(models.Model):
+    panorama = models.ForeignKey('Panorama')
+    information = models.CharField(max_length=128)
+    url = models.URLField()
+    pan = PanDecimalField()
+    tilt = TiltDecimalField()
+
+    def __unicode__(self):
+        return "%s / %s" % (self.panorama.information, self.url)
+

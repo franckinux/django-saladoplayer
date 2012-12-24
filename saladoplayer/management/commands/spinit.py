@@ -29,6 +29,7 @@ class Command(BaseCommand):
         hotspots = {'see': 'oeil_jaune_noir_rond.png',
                     'info':'info_bleu_blanc_triangle.png',
                     'goto': 'pas_orange_blanc_carre.png',
+                    'link': 'fleche_bleu_blanc_rond.png',
                    }
         gallery = Gallery.objects.filter(title_slug__exact='saladoplayer')
         if gallery:

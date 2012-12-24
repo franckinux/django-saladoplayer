@@ -22,6 +22,10 @@ License : GPL v3 -->
             <image id="hotspot_information_{{ i.id }}" location="pan:{{ i.pan|unlocalize }},tilt:{{ i.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'info' %}"
                    mouse="onOver:showBubbleText_information_{{ i.id }},onOut:hideBubble"/>
             {% endfor %}
+            {% for l in p.link_list %}
+            <image id="hotspot_link_{{ l.id }}" location="pan:{{ l.pan|unlocalize }},tilt:{{ l.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'link' %}"
+                   mouse="onClick:openLink_{{ l.id }},onOver:showBubbleText_link_{{ l.id }},onOut:hideBubble"/>
+            {% endfor %}
             {% for f in p.photo_list %}
             <image id="hotspot_image_{{ f.photo.id }}" location="pan:{{ f.pan|unlocalize }},tilt:{{ f.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'see' %}"
                    mouse="onClick:{% if tour.gallery %}showGallery_{{ p.panorama.id }}{% else %}showImageButton_{{ f.photo.id }}{% endif %},onOver:showBubbleText_image_{{ f.photo.id }},onOut:hideBubble"/>
@@ -48,7 +52,9 @@ License : GPL v3 -->
                {% endif %}
                <button name="drag"/>
                <button name="autorotation"/>
+               {% if not tour.full_screener %}
                <button name="fullscreen"/>
+               {% endif %}
             </buttons>
         </ButtonBar>
         <MouseCursor path="~modules/mousecursor/MouseCursor-1.2.swf">
@@ -79,6 +85,9 @@ License : GPL v3 -->
                 <text id="bubbleText_panorama_{{ p.panorama.id }}" text="{{ p.panorama.information }}"/>
                 {% for i in p.information_list %}
                 <text id="bubbleText_information_{{ i.id }}" text="{{ i.information }}"/>
+                {% endfor %}
+                {% for l in p.link_list %}
+                <text id="bubbleText_link_{{ l.id }}" text="{{ l.information }}"/>
                 {% endfor %}
                 {% for f in p.photo_list %}
                 <text id="bubbleText_image_{{ f.photo.id }}" text="{{ f.title }}"/>
@@ -137,6 +146,20 @@ License : GPL v3 -->
             <slider path="~modules/zoomslider/images/elements_dark_40x40.png" slidesVertical="true" minLength="200" maxLength="600"/>
         </ZoomSlider> 
         {% endif %}
+        {% if tour.full_screener %}
+        <FullScreener path="~modules/fullscreener/FullScreener-1.0.swf">
+            <settings path="~modules/fullscreener/images/button_thick_black_50x50.png"/>
+        </FullScreener>
+        {% endif %}
+        <LinkOpener path="~modules/LinkOpener-1.0.swf">
+            <links>
+                 {% for p in panorama_list %}
+                 {% for l in p.link_list %}
+                 <link id="linkOpener_{{ l.id }}" content="{{ l.url }}"/>
+                 {% endfor %}{# l in p.link_list #}
+                 {% endfor %}{# p in panorama_list #}
+            </links>
+        </LinkOpener> 
     </modules>
     {% if hotspot %}
     <actions>
@@ -151,6 +174,10 @@ License : GPL v3 -->
 	{% endif %}
         {% for i in p.information_list %}
         <action id="showBubbleText_information_{{ i.id }}" content="InfoBubble.show(bubbleText_information_{{ i.id }})"/>
+        {% endfor %}
+        {% for l in p.link_list %}
+        <action id="openLink_{{ l.id }}" content="LinkOpener.open(linkOpener_{{ l.id }})" />
+        <action id="showBubbleText_link_{{ l.id }}" content="InfoBubble.show(bubbleText_link_{{ l.id }})"/>
         {% endfor %}
         {% for f in p.photo_list %}
         {% if not tour.gallery %}

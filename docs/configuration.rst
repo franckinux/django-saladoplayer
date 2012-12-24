@@ -39,9 +39,17 @@ You configure your panorama tour by giving all the necessary informations in the
     * **Tilt**. This is float field. This the same as above but for the the tilt parameter.
     * **Show Information**. This is a boolean field. Check it for displaying the information of the destination panorama.
 
-* **Hotspot Informations**. It enables to display some text when the mouse cursor is over an information hotspot. Its fields are as follows :
+* **Information Hotspots**. It enables to display some text when the mouse cursor is over an information hotspot. Its fields are as follows :
 
     * **Panorama**. The panorama where the information has to be displayed in.
+    * **Information**. This is a string field. Its value is used as a label which is displayed when the mouse cursor is over the information hotspot.
     * **Pan**. This is float field. This is the pan parameter of the information hotspot in the panorama.
     * **Tilt**. This is float field. This is the tilt parameter of the information hotspot in the panorama.
-    * **Information**. This is a string field. Its value is used as a label which is displayed when the mouse cursor is over the information hotspot.
+
+* **Link Hotspot**. It enables to open the url in a new browser's window or tab. Its fields are as follows :
+
+    * **Panorama**. The panorama where the link has to be displayed in.
+    * **Url**. This is a string field. This is the url that will be opened in the Internet browser's window.
+    * **Information**. This is a string field. Its value is used as a label which is displayed when the mouse cursor is over the link hotspot.
+    * **Pan**. This is float field. This is the pan parameter of the link hotspot in the panorama.
+    * **Tilt**. This is float field. This is the tilt parameter of the link hotspot in the panorama.

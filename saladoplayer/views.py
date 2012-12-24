@@ -28,8 +28,11 @@ def xml(request, tour_slug, hotspot):
         # consider all the targets from the current panorama
         chaining_list = panorama.from_pano.all()
 
-        # consider each information from the current panorama
+        # consider all information in the current panorama
         information_list = panorama.hotspotinformation_set.all()
+
+        # consider all links in the current panorama
+        link_list = panorama.link_set.all()
 
         #get title, pan, tilt and url of each photo in the gallery
         photo_list = []
@@ -78,6 +81,7 @@ def xml(request, tour_slug, hotspot):
         panorama_list.append({'panorama': panorama,
                               'chaining_list': chaining_list,
                               'information_list': information_list,
+                              'link_list': link_list,
                               'photo_list': photo_list,
                              })
 

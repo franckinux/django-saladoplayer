@@ -8,7 +8,7 @@ License : GPL v3"""
 from django.contrib import admin
 from django import forms
 from django.utils.safestring import mark_safe
-from saladoplayer.models import Tour, Panorama, Chaining, HotspotInformation
+from saladoplayer.models import Tour, Panorama, Chaining, HotspotInformation, Link
 
 class HorizontalRadioRenderer(forms.RadioSelect.renderer):
   def render(self):
@@ -67,7 +67,7 @@ class TourAdmin(admin.ModelAdmin):
     inlines = [PanoramaInline]
     fieldsets = [
         ('', {'fields': ['title', 'title_slug', 'first_panorama']}),
-        ('Tour options', {'fields': [('dropmenu', 'auto_rotation', 'zoomslider', 'viewfinder')]}),
+        ('Tour options', {'fields': [('dropmenu', 'auto_rotation', 'zoomslider', 'viewfinder', 'full_screener')]}),
         ('Photos galleries', {'fields': ['scrollmenu', 'photo_size', 'gallery']}),
         ('Nadir hotspot', {'fields': ['nadir']}),
         ('FaceBook metadata', {'fields': ['facebook', 'description', 'thumb', ('height', 'width')]}),
@@ -103,8 +103,14 @@ class HotspotInformationAdmin(admin.ModelAdmin):
         ('Position', {'fields': [('pan', 'tilt')]}),
     ]
 
+class LinkAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['panorama', 'url', 'information']}),
+        ('Position', {'fields': [('pan', 'tilt')]}),
+    ]
+
 admin.site.register(Tour, TourAdmin)
 admin.site.register(Panorama, PanoramaAdmin)
 admin.site.register(Chaining, ChainingAdmin)
 admin.site.register(HotspotInformation, HotspotInformationAdmin)
-
+admin.site.register(Link, LinkAdmin)
