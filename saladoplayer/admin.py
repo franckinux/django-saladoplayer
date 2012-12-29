@@ -73,7 +73,7 @@ class TourAdmin(admin.ModelAdmin):
     inlines = [PanoramaInline]
     fieldsets = [
         ('', {'fields': [('title', 'title_slug', 'first_panorama')]}),
-        ('Tour options', {'fields': [('dropmenu', 'auto_rotation', 'zoomslider', 'viewfinder', 'full_screener')]}),
+        ('Tour options', {'fields': [('dropmenu', 'auto_rotation', 'zoomslider', 'viewfinder', 'full_screener', 'compass')]}),
         ('Photos galleries', {'fields': ['scrollmenu', 'photo_size', 'gallery']}),
         ('Nadir hotspot', {'fields': ['nadir']}),
         ('FaceBook metadata', {'fields': ['facebook', 'description', 'thumb', ('height', 'width')]}),

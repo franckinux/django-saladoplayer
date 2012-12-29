@@ -47,6 +47,7 @@ class Tour(models.Model):
     zoomslider = models.BooleanField()
     auto_rotation = models.BooleanField()
     full_screener = models.BooleanField()
+    compass = models.BooleanField()
     facebook = models.BooleanField()
     description = models.TextField(blank=True)
     thumb = models.ForeignKey(Photo,

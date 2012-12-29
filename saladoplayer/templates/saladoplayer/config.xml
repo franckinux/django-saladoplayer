@@ -180,6 +180,12 @@ License : GPL v3 -->
             </maps>
         </ImageMap>
         {% endif %}
+        {% if tour.compass %}
+        <Compass path="~modules/compass/Compass-1.2.swf">
+            <window align="horizontal:right" move="horizontal:-20,vertical:-20"/>
+            <settings path="~modules/compass/images/compass_dark_93x81.png"/>
+        </Compass> 
+        {% endif %}
     </modules>
     {% if hotspot %}
     <actions>
