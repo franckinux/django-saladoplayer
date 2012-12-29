@@ -49,17 +49,17 @@ class Tour(models.Model):
     full_screener = models.BooleanField()
     facebook = models.BooleanField()
     description = models.TextField(blank=True)
-    thumb = models.ForeignKey(Photo, 
+    thumb = models.ForeignKey(Photo,
                               blank=True, null=True,
                               related_name='thumb')
     height = models.IntegerField(default=600)
     width = models.IntegerField(default=800)
-    first_panorama = models.ForeignKey('Panorama', 
+    first_panorama = models.ForeignKey('Panorama',
                                        blank=True, null=True,
                                        related_name='first_panorama')
     photo_size = models.ForeignKey(PhotoSize,
                                    blank=True, null=True)
-    nadir = models.ForeignKey(Photo, 
+    nadir = models.ForeignKey(Photo,
                               blank=True, null=True,
                               related_name='nadir')
 
@@ -67,7 +67,7 @@ class Tour(models.Model):
         if self.title_slug is None:
             self.title_slug = slugify(self.title)
         return super(Tour, self).save(*args, **kwargs)
- 
+
     def __unicode__(self):
         return self.title
 
@@ -75,61 +75,85 @@ class Panorama(models.Model):
     """Defines the panorama : what tour it belongs to, in what directory
     it lies, how to move to other panoramas and what is the initial
     position of the camera."""
-    tour = models.ForeignKey('Tour')
+    tour = models.ForeignKey(Tour)
     directory = models.CharField(max_length=128)
-    information = models.CharField(max_length=128)
+    title = models.CharField(max_length=128)
     chaining = models.ManyToManyField('self',
-                                      through='Chaining',
+                                      through='PanoramaHotspot',
                                       symmetrical=False)
     initial_pan = PanDecimalField(optional=True)
     initial_tilt = TiltDecimalField(optional=True)
     min_tilt = TiltDecimalField(optional=True)
     max_tilt = TiltDecimalField(optional=True)
-    gallery = models.ForeignKey(Gallery, 
+    gallery = models.ForeignKey(Gallery,
                                 blank=True, null=True)
+    direction = PanDecimalField(optional=True)
 
     def __unicode__(self):
-        return "%s / %s" % (self.tour.title, self.information)
+        return "%s / %s" % (self.tour.title, self.title)
 
-class Chaining(models.Model):
+class PanoramaHotspot(models.Model):
     """Defines the link between two panoramas, the source and the destination.
     The show_description boolean decides whether the panorama information must
     be shown when the cursor is over the hotspot."""
-    from_panorama = models.ForeignKey('Panorama', related_name='from_pano')
-    to_panorama = models.ForeignKey('Panorama', related_name='to_pano')
+    from_panorama = models.ForeignKey(Panorama, related_name='from_pano')
+    to_panorama = models.ForeignKey(Panorama, related_name='to_pano')
     show_information = models.BooleanField()
     pan = PanDecimalField()
     tilt = TiltDecimalField()
 
     def __unicode__(self):
         return "%s / %s -> %s / %s" % (self.from_panorama.tour.title,
-                                       self.from_panorama.information,
+                                       self.from_panorama.title,
                                        self.to_panorama.tour.title,
-                                       self.to_panorama.information)
+                                       self.to_panorama.title)
 
     class Meta:
         unique_together = (('from_panorama', 'to_panorama'),)
 
-class HotspotInformation(models.Model):
+class Map(models.Model):
+    """Defines the image that will serve as a map in which panoramas are
+    represented as hotspots. You can change of panorama by clicking on them.
+    Direction and field of view of the currently displayed panorama are
+    shown on the map."""
+    map_image = models.ForeignKey(Photo)
+    tour = models.ForeignKey(Tour)
+    pan_shift = PanDecimalField(optional=True)
+
+    def __unicode__(self):
+        return "%s / %s" % (self.map_image.title, self.tour.title)
+
+class PanoramaMapping(models.Model):
+    """Defines the position of the panorama in the image map."""
+    map = models.ForeignKey(Map)
+    panorama = models.ForeignKey(Panorama)
+    x = models.IntegerField()
+    y = models.IntegerField()
+
+    def __unicode__(self):
+        return "%s / %s" % (self.map.map_image.title,
+                            self.panorama.title)
+
+class InformationHotspot(models.Model):
     """Defines the information that is displayed when the cursor is over
     the information hotspot."""
-    panorama = models.ForeignKey('Panorama')
-    information = models.CharField(max_length=128)
+    panorama = models.ForeignKey(Panorama)
+    caption = models.CharField(max_length=128)
     pan = PanDecimalField()
     tilt = TiltDecimalField()
 
     def __unicode__(self):
-        return "%s / %s / %s" % (self.panorama.tour.title, 
-                                 self.panorama.information,
-                                 self.information)
+        return "%s / %s / %s" % (self.panorama.tour.title,
+                                 self.panorama.title,
+                                 self.caption)
 
-class Link(models.Model):
-    panorama = models.ForeignKey('Panorama')
-    information = models.CharField(max_length=128)
+class LinkHotspot(models.Model):
+    panorama = models.ForeignKey(Panorama)
+    caption = models.CharField(max_length=128)
     url = models.URLField()
     pan = PanDecimalField()
     tilt = TiltDecimalField()
 
     def __unicode__(self):
-        return "%s / %s" % (self.panorama.information, self.url)
+        return "%s / %s" % (self.panorama.title, self.caption)
 

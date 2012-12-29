@@ -4,29 +4,29 @@ License : GPL v3 -->
 {% load l10n %}{% load photos %}
 <SaladoPlayer>
     <global debug="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}">
-        {% if tour.auto_rotation %}<control autorotation="enabled:true,delay:10"/>{% endif %}
+        <control autorotation="enabled:{% if tour.auto_rotation %}true,delay:10{% else %}false{% endif %}"/>
         <control mouseWheelTrap="true"/>
         {% if tour.first_panorama %}<panoramas firstPanorama="panorama_{{ tour.first_panorama.id }}"/>{% endif %}
         <trace open="{% if saladoplayersettings.debug %}true{% else %}false{% endif %}"/>
         <branding visible="{% if saladoplayersettings.branding %}true{% else %}false{% endif %}"/>
     </global>
     <panoramas>
-        {% for p in panorama_list %}
-        <panorama id="panorama_{{ p.panorama.id }}" path="{{ saladoplayersettings.url }}/{{ p.panorama.directory }}/face_f.xml" camera="{% if p.panorama.initial_pan %}pan:{{ p.panorama.initial_pan }},{% endif %}{% if p.panorama.initial_tilt %}tilt:{{ p.panorama.initial_tilt }},{% endif %}{% if p.panorama.min_tilt %}minVerticalFov:{{ p.panorama.min_tilt }},{% endif %}{% if p.panorama.max_tilt %}maxVerticalFov:{{ p.panorama.max_tilt }},{% endif %}maxPixelZoom:NaN,minFov:45,maxFov:90"{% if hotspot %} onLeave="hideBubble"{% endif %}{% if tour.scrollmenu %} onEnter="setGroup_{{ p.panorama.id }}"{% endif %}>
+        {% for p in panoramas %}
+        <panorama id="panorama_{{ p.panorama.id }}" path="{{ saladoplayersettings.url }}/{{ p.panorama.directory }}/face_f.xml" camera="{% if p.panorama.initial_pan %}pan:{{ p.panorama.initial_pan|unlocalize }},{% endif %}{% if p.panorama.initial_tilt %}tilt:{{ p.panorama.initial_tilt|unlocalize }},{% endif %}{% if p.panorama.min_tilt %}minVerticalFov:{{ p.panorama.min_tilt|unlocalize }},{% endif %}{% if p.panorama.max_tilt %}maxVerticalFov:{{ p.panorama.max_tilt|unlocalize }},{% endif %}maxPixelZoom:NaN,minFov:45,maxFov:90"{% if hotspot %} onLeave="hideBubble"{% endif %}{% if tour.scrollmenu %} onEnter="setGroup_{{ p.panorama.id }}"{% endif %} {% if p.panorama.direction %}direction="{{ p.panorama.direction|unlocalize }}"{% endif %}>
             {% if hotspot %}
-            {% for c in p.chaining_list %}
+            {% for c in p.chainings %}
             <image id="hotspot_panorama_{{ p.panorama.id }}_{{ c.to_panorama.id }}" location="pan:{{ c.pan|unlocalize }},tilt:{{ c.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.25" path="{% photo_url 'goto' %}"
                    mouse="onClick:loadPano_{{ c.to_panorama.id }}{% if c.show_information %},onOver:showBubbleText_panorama_{{ c.to_panorama.id }},onOut:hideBubble{% endif %}"/>
             {% endfor %}
-            {% for i in p.information_list %}
+            {% for i in p.informations %}
             <image id="hotspot_information_{{ i.id }}" location="pan:{{ i.pan|unlocalize }},tilt:{{ i.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'info' %}"
                    mouse="onOver:showBubbleText_information_{{ i.id }},onOut:hideBubble"/>
             {% endfor %}
-            {% for l in p.link_list %}
+            {% for l in p.links %}
             <image id="hotspot_link_{{ l.id }}" location="pan:{{ l.pan|unlocalize }},tilt:{{ l.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'link' %}"
                    mouse="onClick:openLink_{{ l.id }},onOver:showBubbleText_link_{{ l.id }},onOut:hideBubble"/>
             {% endfor %}
-            {% for f in p.photo_list %}
+            {% for f in p.photos %}
             <image id="hotspot_image_{{ f.photo.id }}" location="pan:{{ f.pan|unlocalize }},tilt:{{ f.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'see' %}"
                    mouse="onClick:{% if tour.gallery %}showGallery_{{ p.panorama.id }}{% else %}showImageButton_{{ f.photo.id }}{% endif %},onOver:showBubbleText_image_{{ f.photo.id }},onOut:hideBubble"/>
             {% endfor %}
@@ -51,7 +51,9 @@ License : GPL v3 -->
                <button name="out" move="horizontal:-40,vertical:15"/>
                {% endif %}
                <button name="drag"/>
+               {% if tour.auto_rotation %}
                <button name="autorotation"/>
+               {% endif %}
                {% if not tour.full_screener %}
                <button name="fullscreen"/>
                {% endif %}
@@ -65,9 +67,9 @@ License : GPL v3 -->
             <window open="false" onOpen="onMenuOpen" onClose="onMenuClose" openTween="time:0.5" closeTween="time:0.5"/>
             <close path="~modules/menuscroller/images/ms_close.png" align="vertical:middle" move="horizontal:60"/>
             <groups>
-                {% for p in panorama_list %}
+                {% for p in panoramas %}
                 <group id="menuScrollerGroup_{{ p.panorama.id}}">
-                    {% for f in p.photo_list %}
+                    {% for f in p.photos %}
                         <extraElement id="menuItem_{{ f.photo.id }}" action="moveTo_{{ f.photo.id }}" path="{{ f.url }}"/>
                     {% endfor %}
                 </group>
@@ -81,15 +83,15 @@ License : GPL v3 -->
         {% if hotspot %}
         <InfoBubble path="~modules/InfoBubble-1.3.2.swf">
             <bubbles>
-                {% for p in panorama_list %}
+                {% for p in panoramas %}
                 <text id="bubbleText_panorama_{{ p.panorama.id }}" text="{{ p.panorama.information }}"/>
-                {% for i in p.information_list %}
+                {% for i in p.informations %}
                 <text id="bubbleText_information_{{ i.id }}" text="{{ i.information }}"/>
                 {% endfor %}
-                {% for l in p.link_list %}
+                {% for l in p.links %}
                 <text id="bubbleText_link_{{ l.id }}" text="{{ l.information }}"/>
                 {% endfor %}
-                {% for f in p.photo_list %}
+                {% for f in p.photos %}
                 <text id="bubbleText_image_{{ f.photo.id }}" text="{{ f.title }}"/>
                 {% endfor %}
                 {% endfor %}
@@ -98,11 +100,11 @@ License : GPL v3 -->
         {% if tour.gallery %}
         <ImageGallery path="~modules/imagegallery/ImageGallery-1.0.swf">
             <viewer path="~modules/imagegallery/images/buttons_dark_40x40.png" throbber="~modules/imagegallery/images/throbber-circles.gif" style="alpha:0.7"/>
-            <close path="~modules/imagegallery/images//close.png" move="vertical:-10,horizontal:10"/>
+            <close path="~modules/imagegallery/images/close.png" move="vertical:-10,horizontal:10"/>
             <groups>
-                {% for p in panorama_list %}
+                {% for p in panoramas %}
                 <group id="galleryGroup_{{ p.panorama.id }}">
-                    {% for f in p.photo_list %}
+                    {% for f in p.photos %}
                     <image path="{{ f.url }}"/>
                     {% endfor %}
                 </group>
@@ -112,8 +114,8 @@ License : GPL v3 -->
         {% endif %}{# tour.gallery #}
         <ImageButton path="~modules/ImageButton-1.3.swf">
             {% if not tour.gallery %}
-            {% for p in panorama_list %}
-            {% for f in p.photo_list %}
+            {% for p in panoramas %}
+            {% for f in p.photos %}
             <button id="imageButton_{{ f.photo.id }}" path="{{ f.url }}" action="hideImageButton_{{ f.photo.id }}">
                 <window align="vertical:middle,horizontal:center" open="false"/>
             </button>
@@ -133,10 +135,10 @@ License : GPL v3 -->
            <settings opensUp="true" style="fontSize:14"/>
            <groups>
                <group id="group">
-                   {% for p in panorama_list %}
+                   {% for p in panoramas %}
                    <element label="{{ p.panorama.information }}" target="panorama_{{ p.panorama.id }}"/>
                    {% endfor %}
-	       </group>
+               </group>
            </groups>
         </DropDown> 
         {% endif %}
@@ -153,17 +155,35 @@ License : GPL v3 -->
         {% endif %}
         <LinkOpener path="~modules/LinkOpener-1.0.swf">
             <links>
-                 {% for p in panorama_list %}
-                 {% for l in p.link_list %}
+                 {% for p in panoramas %}
+                 {% for l in p.links %}
                  <link id="linkOpener_{{ l.id }}" content="{{ l.url }}"/>
-                 {% endfor %}{# l in p.link_list #}
-                 {% endfor %}{# p in panorama_list #}
+                 {% endfor %}{# l in p.links #}
+                 {% endfor %}{# p in panoramas #}
             </links>
-        </LinkOpener> 
+        </LinkOpener>
+        {% if mappings %}
+        <ImageMap path="~modules/imagemap/ImageMap-1.4.2.swf">
+            <close path="~modules/imagemap/images/close.png" move="horizontal:10,vertical:-10"/>
+            <viewer path="~modules/imagemap/images/navigation_black_20x20.png"/>
+            <window margin="right:60"/>
+            <maps>
+                {% for m in mappings %}
+                <map id="image_map_{{ m.map.id }}" path="{{ MEDIA_URL }}{{ m.map.map_image.image.name }}">
+                    <waypoints path="~modules/imagemap/images/waypoints_button_20x20.png" radar="showTilt:true">
+                        {% for pm in m.panorama_mappings %}
+                        <waypoint target="panorama_{{ pm.panorama.id }}" position="x:{{ pm.x }},y:{{ pm.y }}"/>
+                        {% endfor %}
+                    </waypoints>
+                </map>
+                {% endfor %}
+            </maps>
+        </ImageMap>
+        {% endif %}
     </modules>
     {% if hotspot %}
     <actions>
-        {% for p in panorama_list %}
+        {% for p in panoramas %}
         <action id="loadPano_{{ p.panorama.id }}" content="SaladoPlayer.loadPano(panorama_{{ p.panorama.id }})"/>
         <action id="showBubbleText_panorama_{{ p.panorama.id }}" content="InfoBubble.show(bubbleText_panorama_{{ p.panorama.id }})"/>
         {% if tour.scrollmenu %}
@@ -172,14 +192,14 @@ License : GPL v3 -->
         {% if tour.gallery %}
         <action id="showGallery_{{ p.panorama.id }}" content="ImageGallery.setOpen(true);ImageGallery.setGroup(galleryGroup_{{ p.panorama.id }})"/>
 	{% endif %}
-        {% for i in p.information_list %}
+        {% for i in p.informations %}
         <action id="showBubbleText_information_{{ i.id }}" content="InfoBubble.show(bubbleText_information_{{ i.id }})"/>
         {% endfor %}
-        {% for l in p.link_list %}
+        {% for l in p.links %}
         <action id="openLink_{{ l.id }}" content="LinkOpener.open(linkOpener_{{ l.id }})" />
         <action id="showBubbleText_link_{{ l.id }}" content="InfoBubble.show(bubbleText_link_{{ l.id }})"/>
         {% endfor %}
-        {% for f in p.photo_list %}
+        {% for f in p.photos %}
         {% if not tour.gallery %}
         <action id="showImageButton_{{ f.photo.id }}" content="ImageButton.setOpen(imageButton_{{ f.photo.id }},true)"/>
         <action id="hideImageButton_{{ f.photo.id }}" content="ImageButton.setOpen(imageButton_{{ f.photo.id }},false)"/>
@@ -188,8 +208,8 @@ License : GPL v3 -->
         {% if tour.scrollmenu %}
         <action id="moveTo_{{ f.photo.id }}" content="SaladoPlayer.moveToHotspotThen(hotspot_image_{{ f.photo.id }},90,zoomHotspot)"/>
         {% endif %}
-        {% endfor %}{# f in p.photo_list #}
-        {% endfor %}{# p in panorama_list #}
+        {% endfor %}{# f in p.photos #}
+        {% endfor %}{# p in panoramas #}
         <action id="hideBubble" content="InfoBubble.hide()"/>
         {% if tour.scrollmenu %}
         <action id="onMenuOpen" content="ImageButton.setOpen(buttonMenu,false)"/>

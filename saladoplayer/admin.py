@@ -8,7 +8,7 @@ License : GPL v3"""
 from django.contrib import admin
 from django import forms
 from django.utils.safestring import mark_safe
-from saladoplayer.models import Tour, Panorama, Chaining, HotspotInformation, Link
+from saladoplayer.models import *
 
 class HorizontalRadioRenderer(forms.RadioSelect.renderer):
   def render(self):
@@ -34,11 +34,17 @@ class PanoramaAdminForm(forms.ModelForm):
             if max_tilt:
                 if  max_tilt < initial_tilt:
                     raise forms.ValidationError("Initial tilt must be lower than max_tilt")
+        map = cleaned_data.get("map")
+        x = cleaned_data.get("x")
+        y = cleaned_data.get("y")
+        if map:
+            if not x or not y:
+                raise forms.ValidationError("Missing x or y")
         return cleaned_data
 
 class PanoramaAdmin(admin.ModelAdmin):
     fieldsets = [
-        ('', {'fields': ['tour', 'directory', 'information']}),
+        ('', {'fields': ['tour', 'directory', 'title', 'direction']}),
         ('Initial position', {'fields': [('initial_pan', 'initial_tilt')]}),
         ('Vertical field of view limitation', {'fields': [('min_tilt', 'max_tilt')]}),
         ('Photo gallery', {'fields': ['gallery']}),
@@ -52,7 +58,7 @@ class TourAdminForm(forms.ModelForm):
                                  choices=((True, 'Gallery'),
                                           (False, 'Image button')),
                                  renderer=HorizontalRadioRenderer)}
-    
+
     def clean(self):
         cleaned_data = super(TourAdminForm, self).clean()
         facebook = cleaned_data.get("facebook")
@@ -66,7 +72,7 @@ class TourAdminForm(forms.ModelForm):
 class TourAdmin(admin.ModelAdmin):
     inlines = [PanoramaInline]
     fieldsets = [
-        ('', {'fields': ['title', 'title_slug', 'first_panorama']}),
+        ('', {'fields': [('title', 'title_slug', 'first_panorama')]}),
         ('Tour options', {'fields': [('dropmenu', 'auto_rotation', 'zoomslider', 'viewfinder', 'full_screener')]}),
         ('Photos galleries', {'fields': ['scrollmenu', 'photo_size', 'gallery']}),
         ('Nadir hotspot', {'fields': ['nadir']}),
@@ -75,42 +81,99 @@ class TourAdmin(admin.ModelAdmin):
     prepopulated_fields = {'title_slug': ('title',)}
     form = TourAdminForm
 
-class ChainingAdminForm(forms.ModelForm):
+class PanoramaHotspotAdminForm(forms.ModelForm):
     class Meta:
-        model = Chaining
+        model = PanoramaHotspot
 
     def clean(self):
-        cleaned_data = super(ChainingAdminForm, self).clean()
+        cleaned_data = super(PanoramaHotspotAdminForm, self).clean()
         from_panorama = cleaned_data.get('from_panorama')
         to_panorama = cleaned_data.get('to_panorama')
         if from_panorama.id == to_panorama.id:
-            raise forms.ValidationError("Source and destination panoramas must be distinct")
+            raise forms.ValidationError('Source and destination panoramas must be distinct')
         if from_panorama.tour.id != to_panorama.tour.id:
-            raise forms.ValidationError("Source and destination panoramas must belong to the same tour")
+            raise forms.ValidationError('Source and destination panoramas must belong to the same tour')
         return cleaned_data
 
-class ChainingAdmin(admin.ModelAdmin):
+class PanoramaMappingInlineFormSet(forms.models.BaseInlineFormSet):
+    def clean(self):
+        super(PanoramaMappingInlineFormSet, self).clean()
+        for form in self.forms:
+            if not form.is_valid():
+                return
+            if form.cleaned_data:
+                cleaned_data = form.cleaned_data
+                map = cleaned_data.get('map')
+                pano = cleaned_data.get('panorama')
+                if pano.tour.id != map.tour.id:
+                    raise forms.ValidationError('The panorama does not belong to the image map belongs to')
+        return
+
+class PanoramaMappingInline(admin.TabularInline):
+    model = PanoramaMapping
+    extra = 2
+    formset = PanoramaMappingInlineFormSet
+
+class PanoramaMappingAdminForm(forms.ModelForm):
+    class Meta:
+        model = PanoramaMapping
+
+    def clean(self):
+        cleaned_data = super(PanoramaMappingAdminForm, self).clean()
+        #check point position in the image map
+        map = cleaned_data.get('map')
+        x = cleaned_data.get('x')
+        y = cleaned_data.get('y')
+        if x > map.map_image.image.width or y > map.map_image.image.height:
+            raise forms.ValidationError('Point outside the map')
+        #check that the pano is in the tour
+        pano = cleaned_data.get('panorama')
+        if pano.tour.id != map.tour.id:
+            raise forms.ValidationError('The panorama does not belong to the image map belongs to')
+        return cleaned_data
+
+class PanoramaMappingAdmin(admin.ModelAdmin):
+    fieldsets = [
+        ('', {'fields': ['map', 'panorama']}),
+        ('Position', {'fields': [('x', 'y')]}),
+    ]
+    form = PanoramaMappingAdminForm
+
+class MapAdminForm(forms.ModelForm):
+    class Meta:
+        model = Map
+
+class MapAdmin(admin.ModelAdmin):
+    inlines = [PanoramaMappingInline]
+    fieldsets = [
+        ('', {'fields': ['map_image', 'tour', 'pan_shift']}),
+    ]
+    form = MapAdminForm
+
+class PanoramaHotspotAdmin(admin.ModelAdmin):
     fieldsets = [
         ('Panorama chaining', {'fields': ['from_panorama', 'to_panorama']}),
         ('Position', {'fields': [('pan', 'tilt')]}),
         ('Options', {'fields': ['show_information']}),
     ]
-    form = ChainingAdminForm
+    form = PanoramaHotspotAdminForm
 
-class HotspotInformationAdmin(admin.ModelAdmin):
+class InformationHotspotAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['panorama', 'information']}),
+        (None, {'fields': ['panorama', 'caption']}),
         ('Position', {'fields': [('pan', 'tilt')]}),
     ]
 
-class LinkAdmin(admin.ModelAdmin):
+class LinkHotspotAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['panorama', 'url', 'information']}),
+        (None, {'fields': ['panorama', 'url', 'caption']}),
         ('Position', {'fields': [('pan', 'tilt')]}),
     ]
 
 admin.site.register(Tour, TourAdmin)
 admin.site.register(Panorama, PanoramaAdmin)
-admin.site.register(Chaining, ChainingAdmin)
-admin.site.register(HotspotInformation, HotspotInformationAdmin)
-admin.site.register(Link, LinkAdmin)
+admin.site.register(Map, MapAdmin)
+admin.site.register(PanoramaMapping, PanoramaMappingAdmin)
+admin.site.register(PanoramaHotspot, PanoramaHotspotAdmin)
+admin.site.register(InformationHotspot, InformationHotspotAdmin)
+admin.site.register(LinkHotspot, LinkHotspotAdmin)

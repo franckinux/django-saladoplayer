@@ -5,6 +5,7 @@
 (C) Franck Barbenoire <fbarbenoire@yahoo.fr>
 License : GPL v3"""
 
+from collections import defaultdict
 from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from saladoplayer.models import Tour
@@ -19,23 +20,21 @@ def xml(request, tour_slug, hotspot):
     tour = get_object_or_404(Tour, title_slug=tour_slug)
 
     # default values
-    panorama_list = []
+    panoramas = []
 
     # we iterate on all panoramas in the tour
-    panoramas = tour.panorama_set.all()
+    for panorama in tour.panorama_set.all():
+        # consider all the panorama targets from the current panorama
+        chainings = panorama.from_pano.all()
 
-    for panorama in panoramas:
-        # consider all the targets from the current panorama
-        chaining_list = panorama.from_pano.all()
-
-        # consider all information in the current panorama
-        information_list = panorama.hotspotinformation_set.all()
+        # consider all information hotspots in the current panorama
+        informations = panorama.informationhotspot_set.all()
 
         # consider all links in the current panorama
-        link_list = panorama.link_set.all()
+        links = panorama.linkhotspot_set.all()
 
         #get title, pan, tilt and url of each photo in the gallery
-        photo_list = []
+        photos = []
         if settings.MEDIA_URL and panorama.gallery:
             for photo in panorama.gallery.photos.all():
                 if not photo.is_public:
@@ -66,29 +65,36 @@ def xml(request, tour_slug, hotspot):
                 except:
                     #get the default filename if something goes wrong
                     url = photo.image.name
-                photo_dict = {'photo': photo,
-                              'title': photo.caption if photo.caption 
-                                                     else photo_attrs[0],
-                              'pan': pan,
-                              'tilt': tilt,
-                              'url': url
-                             }
-                photo_list.append(photo_dict)
 
+                photos.append({'photo': photo,
+                               'title': photo.caption if photo.caption
+                                                      else photo_attrs[0],
+                               'pan': pan,
+                               'tilt': tilt,
+                               'url': url
+                              })
         else:
-            photo_list = []
+            photos = []
 
-        panorama_list.append({'panorama': panorama,
-                              'chaining_list': chaining_list,
-                              'information_list': information_list,
-                              'link_list': link_list,
-                              'photo_list': photo_list,
-                             })
+        panoramas.append({'panorama': panorama,
+                          'chainings': chainings,
+                          'informations': informations,
+                          'links': links,
+                          'photos': photos,
+                         })
+
+    # consider all maps in the current tour
+    mappings = []
+    for map in tour.map_set.all():
+        mappings.append({'map': map,
+                         'panorama_mappings': map.panoramamapping_set.all(),
+                        })
 
     return render(request,
                   'saladoplayer/config.xml',
                   {'tour': tour,
-                   'panorama_list': panorama_list,
+                   'panoramas': panoramas,
+                   'mappings': mappings,
                    'hotspot': hotspot == 'hs',
                   })
 
