@@ -5,35 +5,21 @@
 (C) Franck Barbenoire <fbarbenoire@yahoo.fr>
 License : GPL v3"""
 
-from django.core.validators import MaxValueValidator, MinValueValidator
+from django.core.validators import MinValueValidator, MaxValueValidator
 from django.db import models
 from django.template.defaultfilters import slugify
 from photologue.models import Gallery, Photo, PhotoSize
 
-class AngleDecimalField(models.DecimalField):
-    """Class defining an angular position. It serves as a base class
-    for both PanDecimalField and TiltDecimalField"""
-    def __init__(self, optional, angle, *args, **kwargs):
-        kwargs['max_digits'] = 6
-        kwargs['decimal_places'] = 2
-        kwargs['validators'] = [MinValueValidator(-angle),
-                                MaxValueValidator(angle)]
-        if optional:
-            kwargs['blank'] = True
-            kwargs['null'] = True
-        super(AngleDecimalField, self).__init__(*args, **kwargs)
-
-class PanDecimalField(AngleDecimalField):
-    """Class defining the pan angular position"""
-    def __init__(self, optional=False, *args, **kwargs):
-        super(PanDecimalField, self).__init__(optional, angle=180,
-                                              *args, **kwargs)
-
-class TiltDecimalField(AngleDecimalField):
-    """Class defining the tilt angular position"""
-    def __init__(self, optional=False, *args, **kwargs):
-        super(TiltDecimalField, self).__init__(optional, angle=90,
-                                               *args, **kwargs)
+pan_kwargs = {'validators': [MinValueValidator(-180.0),
+                             MaxValueValidator(180.0)],
+              'max_digits': 6,
+              'decimal_places': 2,
+             }
+tilt_kwargs = {'validators': [MinValueValidator(-90.0),
+                              MaxValueValidator(90.0)],
+               'max_digits': 6,
+               'decimal_places': 2,
+              }
 
 class Tour(models.Model):
     """Defines the panoramas in the tour."""
@@ -82,13 +68,13 @@ class Panorama(models.Model):
     chaining = models.ManyToManyField('self',
                                       through='PanoramaHotspot',
                                       symmetrical=False)
-    initial_pan = PanDecimalField(optional=True)
-    initial_tilt = TiltDecimalField(optional=True)
-    min_tilt = TiltDecimalField(optional=True)
-    max_tilt = TiltDecimalField(optional=True)
+    initial_pan = models.DecimalField(blank=True, null=True, **pan_kwargs)
+    initial_tilt = models.DecimalField(blank=True, null=True, **tilt_kwargs)
+    min_tilt = models.DecimalField(blank=True, null=True, **tilt_kwargs)
+    max_tilt = models.DecimalField(blank=True, null=True, **tilt_kwargs)
     gallery = models.ForeignKey(Gallery,
                                 blank=True, null=True)
-    direction = PanDecimalField(optional=True)
+    direction = models.DecimalField(blank=True, null=True, **pan_kwargs)
 
     def __unicode__(self):
         return "%s / %s" % (self.tour.title, self.title)
@@ -100,8 +86,8 @@ class PanoramaHotspot(models.Model):
     from_panorama = models.ForeignKey(Panorama, related_name='from_pano')
     to_panorama = models.ForeignKey(Panorama, related_name='to_pano')
     show_information = models.BooleanField()
-    pan = PanDecimalField()
-    tilt = TiltDecimalField()
+    pan = models.DecimalField(**pan_kwargs)
+    tilt = models.DecimalField(**tilt_kwargs)
 
     def __unicode__(self):
         return "%s / %s -> %s / %s" % (self.from_panorama.tour.title,
@@ -119,7 +105,7 @@ class Map(models.Model):
     shown on the map."""
     map_image = models.ForeignKey(Photo)
     tour = models.ForeignKey(Tour)
-    pan_shift = PanDecimalField(optional=True)
+    pan_shift = models.DecimalField(blank=True, null=True, **pan_kwargs)
 
     def __unicode__(self):
         return "%s / %s" % (self.map_image.title, self.tour.title)
@@ -139,22 +125,22 @@ class InformationHotspot(models.Model):
     """Defines the information that is displayed when the cursor is over
     the information hotspot."""
     panorama = models.ForeignKey(Panorama)
-    caption = models.CharField(max_length=128)
-    pan = PanDecimalField()
-    tilt = TiltDecimalField()
+    title = models.CharField(max_length=128)
+    pan = models.DecimalField(**pan_kwargs)
+    tilt = models.DecimalField(**tilt_kwargs)
 
     def __unicode__(self):
         return "%s / %s / %s" % (self.panorama.tour.title,
                                  self.panorama.title,
-                                 self.caption)
+                                 self.title)
 
 class LinkHotspot(models.Model):
     panorama = models.ForeignKey(Panorama)
-    caption = models.CharField(max_length=128)
+    title = models.CharField(max_length=128)
     url = models.URLField()
-    pan = PanDecimalField()
-    tilt = TiltDecimalField()
+    pan = models.DecimalField(**pan_kwargs)
+    tilt = models.DecimalField(**tilt_kwargs)
 
     def __unicode__(self):
-        return "%s / %s" % (self.panorama.title, self.caption)
+        return "%s / %s" % (self.panorama.title, self.title)
 

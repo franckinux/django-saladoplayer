@@ -3,6 +3,5 @@ MANIFEST
 *~
 build/*
 dist/*
-saladoplayer/migrations/*
 *.log
 django_saladoplayer.egg-info/*

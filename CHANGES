@@ -8,6 +8,7 @@ Released on December ?th, 2012
 * make use of FullScreener and LinkOpener SaladoPlayer modules
 * make use of ImageMap SaladoPlayer modules
 * make use of Compass SaladoPlayer modules
+* remove custom fields in data model so that south can be used again
 
 Version 0.3.1
 -------------

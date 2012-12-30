@@ -61,11 +61,17 @@ class TourAdminForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(TourAdminForm, self).clean()
+        #check facebook parameters
         facebook = cleaned_data.get("facebook")
         description = cleaned_data.get("description")
         thumb = cleaned_data.get("thumb")
         if facebook and not (description and thumb):
             raise forms.ValidationError("A description and a thumb image are needed to be included in Facebook metadata")
+        #check gallery parameters
+        scrollmenu = cleaned_data.get("scrollmenu")
+        photo_size = cleaned_data.get("photo_size")
+        if scrollmenu and not photo_size:
+            raise forms.ValidationError('You must define and use a photologue size')
         return cleaned_data
 
 
@@ -160,13 +166,13 @@ class PanoramaHotspotAdmin(admin.ModelAdmin):
 
 class InformationHotspotAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['panorama', 'caption']}),
+        (None, {'fields': ['panorama', 'title']}),
         ('Position', {'fields': [('pan', 'tilt')]}),
     ]
 
 class LinkHotspotAdmin(admin.ModelAdmin):
     fieldsets = [
-        (None, {'fields': ['panorama', 'url', 'caption']}),
+        (None, {'fields': ['panorama', 'url', 'title']}),
         ('Position', {'fields': [('pan', 'tilt')]}),
     ]
 
