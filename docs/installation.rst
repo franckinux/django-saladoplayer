@@ -43,6 +43,7 @@ spinit configures the SaladoPlayer application database. It checks that you have
 * sample init session :
 ::
 
+
   $ python manage.py syncdb
   Syncing...
   Creating tables ...
@@ -59,10 +60,7 @@ spinit configures the SaladoPlayer application database. It checks that you have
   Creating table tagging_tag
   Creating table tagging_taggeditem
   Creating table south_migrationhistory
-  Creating table saladoplayer_tour
-  Creating table saladoplayer_panorama
-  Creating table saladoplayer_chaining
-  Creating table saladoplayer_hotspotinformation
+  Creating table audiotracks_track
 
   You just installed Django's auth system, which means you don't have any superusers defined.
   Would you like to create one now? (yes/no): yes
@@ -86,10 +84,12 @@ spinit configures the SaladoPlayer application database. It checks that you have
   > django_extensions
   > tagging
   > south
-  > saladoplayer
+  > audiotracks
 
   Not synced (use migrations):
   - photologue
+  - captcha
+  - saladoplayer
   (use ./manage.py migrate to migrate these)
   $ python manage.py migrate
   Running migrations for photologue:
@@ -99,22 +99,46 @@ spinit configures the SaladoPlayer application database. It checks that you have
   > photologue:0003_auto__chg_field_photosize_name
   - Loading initial data for photologue.
   Installed 0 object(s) from 0 fixture(s)
+  Running migrations for captcha:
+  - Migrating forwards to 0001_initial.
+  > captcha:0001_initial
+  - Loading initial data for captcha.
+  Installed 0 object(s) from 0 fixture(s)
+  Running migrations for saladoplayer:
+  - Migrating forwards to 0001_initial.
+  > saladoplayer:0001_initial
+  - Loading initial data for saladoplayer.
+  Installed 0 object(s) from 0 fixture(s)
   $ python manage.py plinit
+
   Photologue requires a specific photo size to display thumbnail previews in the Django admin application.
-  Would you like to generate this size now? (yes, no):no
+  Would you like to generate this size now? (yes, no):yes
+
+  We will now define the "admin_thumbnail" photo size:
+
+  Width (in pixels):200
+  Height (in pixels):150
+  Crop to fit? (yes, no):no
+  Pre-cache? (yes, no):yes
+  Increment count? (yes, no):no
+
+  A "admin_thumbnail" photo size has been created.
+
+  Would you like to apply a sample enhancement effect to your admin thumbnails? (yes, no):no
 
   Photologue comes with a set of templates for setting up a complete photo gallery. These templates require you to define both a "thumbnail" and "display" size.
   Would you like to define them now? (yes, no):yes
 
   We will now define the "thumbnail" photo size:
 
-  Width (in pixels):150
-  Height (in pixels):120
+  Width (in pixels):200
+  Height (in pixels):150
   Crop to fit? (yes, no):no
   Pre-cache? (yes, no):yes
   Increment count? (yes, no):no
 
   A "thumbnail" photo size has been created.
+
 
   We will now define the "display" photo size:
 

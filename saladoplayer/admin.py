@@ -24,6 +24,7 @@ class PanoramaAdminForm(forms.ModelForm):
 
     def clean(self):
         cleaned_data = super(PanoramaAdminForm, self).clean()
+        #check initial tilt
         initial_tilt = cleaned_data.get("initial_tilt")
         min_tilt = cleaned_data.get("min_tilt")
         max_tilt = cleaned_data.get("max_tilt")
@@ -34,6 +35,7 @@ class PanoramaAdminForm(forms.ModelForm):
             if max_tilt:
                 if  max_tilt < initial_tilt:
                     raise forms.ValidationError("Initial tilt must be lower than max_tilt")
+        #check points in map
         map = cleaned_data.get("map")
         x = cleaned_data.get("x")
         y = cleaned_data.get("y")
@@ -70,7 +72,7 @@ class TourAdminForm(forms.ModelForm):
         #check gallery parameters
         scrollmenu = cleaned_data.get("scrollmenu")
         photo_size = cleaned_data.get("photo_size")
-        if scrollmenu and not photo_size:
+        if not photo_size:
             raise forms.ValidationError('You must define and use a photologue size')
         return cleaned_data
 

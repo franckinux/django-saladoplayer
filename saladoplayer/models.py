@@ -10,14 +10,16 @@ from django.db import models
 from django.template.defaultfilters import slugify
 from photologue.models import Gallery, Photo, PhotoSize
 
-pan_kwargs = {'validators': [MinValueValidator(-180.0),
-                             MaxValueValidator(180.0)],
-              'max_digits': 6,
+#this does not work on alwaysdata.com
+#pan_kwargs = {'validators': [MinValueValidator(-180.0),
+#                             MaxValueValidator(180.0)],
+pan_kwargs = {'max_digits': 6,
               'decimal_places': 2,
              }
-tilt_kwargs = {'validators': [MinValueValidator(-90.0),
-                              MaxValueValidator(90.0)],
-               'max_digits': 6,
+#this does not work on alwaysdata.com
+#tilt_kwargs = {'validators': [MinValueValidator(-90.0),
+#                              MaxValueValidator(90.0)],
+tilt_kwargs = {'max_digits': 6,
                'decimal_places': 2,
               }
 

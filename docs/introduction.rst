@@ -6,7 +6,7 @@ Franck Barbenoire <fbarbenoire@yahoo.fr>
 Software version
 ================
 
-Version 0.3.2, December ?, 2012.
+Version 0.3.2, January 1st, 2013.
 
 License
 =======
