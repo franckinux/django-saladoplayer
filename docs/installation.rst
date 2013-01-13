@@ -16,9 +16,10 @@ The SaladoPlayer application does not require any other application to be instal
 
 * insert the saladoplayer.contextprocessor.settings in the TEMPLATE_CONTEXT_PROCESSORS tuple in your project settings.py::
 
-    TEMPLATE_CONTEXT_PROCESSORS = (
+    TEMPLATE_CONTEXT_PROCESSORS += (
     ...
-    saladoplayer.context_processor.settings,
+    'saladoplayer.context_processor.settings',
+    'django.core.context_processors.request',
     ...
     )
 
@@ -39,6 +40,11 @@ The SaladoPlayer application does not require any other application to be instal
 plinit configures the Photologue application database. Create the "thumbnail" and "display" sizes, they will be used by Saladoplayer.
 
 spinit configures the SaladoPlayer application database. It checks that you have created the above sizes in Photologue. It also creates a Photologue gallery named "saladoplayer" and inserts 3 hotspot images. You can change the images to redefine the hotspot images. There is currently 3 images named "see", "goto" and "info". You have to use the same names.
+
+* there are still some simple tasks to accomplish for making this work. I will not detail here since you can find them in the general documentation of Django :
+
+    * collect the static files
+    * setup the media and static stuff in the settings.py configuration file
 
 * sample init session :
 ::

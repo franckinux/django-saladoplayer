@@ -3,18 +3,22 @@ Screenshots
 
 Here is some screenshots from the administration interface :
 
-- tour configuration :
+- Tour configuration :
 
 .. image:: images/tour.png
 
-- chaining hotspot configuration :
+- Tanorama hotspot configuration :
 
 .. image:: images/chaining.png
 
-- information hotspot configuration :
+- Information hotspot configuration :
 
 .. image:: images/information.png
 
-Here the result of the above configuration :
+- The saladoplyer gallery of hotspot images. You can change them.
+
+.. image:: images/album-saladoplayer.png
+
+Example result :
 
 .. image:: images/saint-julien-du-tournel.png

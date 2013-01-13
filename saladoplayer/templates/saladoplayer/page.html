@@ -5,10 +5,12 @@ License : GPL v3 -->
 <meta HTTP-EQUIV="PRAGMA" CONTENT="NO-CACHE">
 {% if tour.facebook %}
 {% load static %}
+<meta charset="utf-8" />
+<meta name="medium" content="video" />
 <meta name="title" content="{{ tour.title }}" />
 <meta name="description" content="{{ tour.description }}" />
 <link rel="image_src" href="{{ tour.thumb.get_thumbnail_url }}" />
-<link rel="video_src" href="{% get_static_prefix %}SaladoPlayer-1.3.3.swf?xml=/saladoplayer/xml/{{ tour_slug }}/{{ hotspot }}/&tilde={% get_static_prefix %}"/>
+<link rel="video_src" href="{% get_static_prefix %}SaladoPlayer-1.3.3.swf?xml=http://{{ request.get_host }}/saladoplayer/xml/{{ tour_slug }}/{{ hotspot }}/&tilde={% get_static_prefix %}"/>
 <meta name="video_height" content="{{ tour.height }}" />
 <meta name="video_width" content="{{ tour.width }}" />
 <meta name="video_type" content="application/x-shockwave-flash" />

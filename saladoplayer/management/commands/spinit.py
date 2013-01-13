@@ -5,9 +5,11 @@
 (C) Franck Barbenoire <fbarbenoire@yahoo.fr>
 License : GPL v3"""
 
+import os
 from django.core.management.base import BaseCommand, CommandError
 from django.utils import timezone
 from django.core.files import File
+import saladoplayer
 
 class Command(BaseCommand):
     help = 'Initialization is salasoplyer app'
@@ -52,7 +54,12 @@ class Command(BaseCommand):
         g.save()
         # create three default hotspots and add them to the gallery
         for k, v in hotspots.items():
-            f = File(open("saladoplayer/static/hotspots/images/%s" % v))
+            filename = os.path.join(os.path.dirname(saladoplayer.__file__),
+                               'static/hotspots/images/%s' % v)
+            #TODO: I really liked to give the 'upload_to 'parameter to an
+            #ImageFiled instance but I didn't manage to make it work
+            #This is why PHOTOLOGUE_PATH is defined in settings.*
+            f = File(open(filename))
             p = Photo(title=k, title_slug=k, image=f,
                       date_added=creation_date, date_taken=creation_date)
             p.save()

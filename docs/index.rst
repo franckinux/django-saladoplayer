@@ -18,7 +18,13 @@ Contents:
    screenshots
    tips
 
-Example : http://django-applis.franck-barbenoire.fr/saladoplayer/html/4/hs/
+Example
+-------
+
+The example integrated in a web site : http://franck-barbenoire.fr/spip.php?article195
+The html page : http://django-applis.franck-barbenoire.fr/saladoplayer/html/egliseneuve-entraigues
+The xml page : http://django-applis.franck-barbenoire.fr/saladoplayer/xml/egliseneuve-entraigues
+
 
 Indices and tables
 ==================

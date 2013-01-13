@@ -1,5 +1,5 @@
 - in admin interface, choose source and target within the same tour.
-- find a way for scaling hotspot images.
-- find a better way for getting pan & tilt of images. currently in the title of the photo.
-- use a photologue size (predefined thumb size ?) for the facebook thumb image.
-- make previous image disappear when a new one pops up.
+- in admin interface, the first panorama must be within the same tour.
+- find a way for scaling hotspot images. a possible is to add a third optional parameter (distance) after the pan and tild in the photo title.
+- find a better way for setting pan & tilt of images. currently in the title of the photo.
+- make previous ImageButton disappear when a new one pops up.

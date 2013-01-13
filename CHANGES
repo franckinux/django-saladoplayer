@@ -1,3 +1,11 @@
+Version 0.3.3
+-------------
+
+Released on January 13th, 2013
+
+* correct the access to the hotspot images for putting them in a photologue gallery
+* the SaladoPlayer swf have been recomplied in order to enable inter dommain accesses
+
 Version 0.3.2
 -------------
 
