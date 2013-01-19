@@ -52,17 +52,14 @@ class Command(BaseCommand):
                     description='for use by saladoplayer app',
                     date_added=creation_date)
         g.save()
-        # create three default hotspots and add them to the gallery
+        # create default hotspots and add them to the 'saladoplayer' gallery
         for k, v in hotspots.items():
             filename = os.path.join(os.path.dirname(saladoplayer.__file__),
-                               'static/hotspots/images/%s' % v)
-            #TODO: I really liked to give the 'upload_to 'parameter to an
-            #ImageFiled instance but I didn't manage to make it work
-            #This is why PHOTOLOGUE_PATH is defined in settings.*
+                                    'static/hotspots/images/%s' % v)
             f = File(open(filename))
-            p = Photo(title=k, title_slug=k, image=f,
+            p = Photo(title=k, title_slug=k,
                       date_added=creation_date, date_taken=creation_date)
-            p.save()
+            p.image.save('saladoplayer/%s' % (v,), f, save=True)
             f.close()
             g.photos.add(p)
         self.stdout.write('saladoplayer gallery successfuly added\n')
