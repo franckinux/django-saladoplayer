@@ -7,7 +7,7 @@ Here is some screenshots from the administration interface :
 
 .. image:: images/tour.png
 
-- Tanorama hotspot configuration :
+- Panorama hotspot configuration :
 
 .. image:: images/chaining.png
 
@@ -15,10 +15,15 @@ Here is some screenshots from the administration interface :
 
 .. image:: images/information.png
 
-- The saladoplyer gallery of hotspot images. You can change them.
+- The saladoplayer gallery of hotspot images installed by default. You can change them.
 
 .. image:: images/album-saladoplayer.png
 
 Example result :
 
-.. image:: images/saint-julien-du-tournel.png
+.. image:: images/egliseneuve-entraigues.png
+
+Result  on Facebook :
+
+.. image:: images/facebook.png
+.. image:: images/facebook2.png

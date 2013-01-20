@@ -39,9 +39,9 @@ The SaladoPlayer application does not require any other application to be instal
 
 plinit configures the Photologue application database. Create the "thumbnail" and "display" sizes, they will be used by Saladoplayer.
 
-spinit configures the SaladoPlayer application database. It checks that you have created the above sizes in Photologue. It also creates a Photologue gallery named "saladoplayer" and inserts 3 hotspot images. You can change the images to redefine the hotspot images. There is currently 3 images named "see", "goto" and "info". You have to use the same names.
+spinit configures the SaladoPlayer application database. It checks that you have created the above sizes in Photologue. It also creates a Photologue gallery named "saladoplayer" and inserts 4 hotspot images. You can change the images to redefine the hotspot images. There is currently 4 images named "see", "goto" ,"info" and "link". You have to use the same names.
 
-* there are still some simple tasks to accomplish for making this work. I will not detail here since you can find them in the general documentation of Django :
+* there are still some simple tasks to accomplish for making this work. I will not detail them here since you can find them in the general Django documentation :
 
     * collect the static files
     * setup the media and static stuff in the settings.py configuration file
