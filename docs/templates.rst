@@ -14,7 +14,7 @@ You can use the following templates tags for including them in your own template
     * **width**. This is an integer argument. This is the width of the SaladoPlayer window::
     * **hotspot**. This is a string argument. Its value may be "hs" or "nohs" depending on whether you want the hotspots to be displayed or not.
 
-        {% saladoplayerscript tour_slug hotspot height width %}
+        {% saladoplayerscript tour_slug height width hotspot %}
 
 * **saladoplayerdiv** : There is no argument. This template tag must inserted in the body part of the html page where you want the tour to appear. It inserts a div html tag which id is "SaladoPlayer"::
 
