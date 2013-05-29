@@ -178,6 +178,13 @@ class LinkHotspotAdmin(admin.ModelAdmin):
         ('Position', {'fields': [('pan', 'tilt')]}),
     ]
 
+class GalleryHotspotAdmin(admin.ModelAdmin):
+    fieldsets = [
+        (None, {'fields': ['panorama']}),
+        ('Position', {'fields': [('pan', 'tilt')]}),
+        ('Photo gallery', {'fields': ['gallery']}),
+    ]
+
 admin.site.register(Tour, TourAdmin)
 admin.site.register(Panorama, PanoramaAdmin)
 admin.site.register(Map, MapAdmin)
@@ -185,3 +192,4 @@ admin.site.register(PanoramaMapping, PanoramaMappingAdmin)
 admin.site.register(PanoramaHotspot, PanoramaHotspotAdmin)
 admin.site.register(InformationHotspot, InformationHotspotAdmin)
 admin.site.register(LinkHotspot, LinkHotspotAdmin)
+admin.site.register(GalleryHotspot, GalleryHotspotAdmin)

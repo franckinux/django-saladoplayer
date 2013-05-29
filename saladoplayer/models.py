@@ -146,3 +146,11 @@ class LinkHotspot(models.Model):
     def __unicode__(self):
         return "%s / %s" % (self.panorama.title, self.title)
 
+class GalleryHotspot(models.Model):
+    panorama = models.ForeignKey(Panorama)
+    pan = models.DecimalField(**pan_kwargs)
+    tilt = models.DecimalField(**tilt_kwargs)
+    gallery = models.ForeignKey(Gallery)
+
+    def __unicode__(self):
+        return "%s / %s" % (self.panorama.title, self.gallery.title)
