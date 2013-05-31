@@ -28,7 +28,11 @@ License : GPL v3 -->
             {% endfor %}
             {% for f in p.photos %}
             <image id="hotspot_image_{{ f.photo.id }}" location="pan:{{ f.pan|unlocalize }},tilt:{{ f.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'see' %}"
-                   mouse="onClick:{% if tour.gallery %}showGallery_{{ p.panorama.id }}{% else %}showImageButton_{{ f.photo.id }}{% endif %},onOver:showBubbleText_image_{{ f.photo.id }},onOut:hideBubble"/>
+                   mouse="onClick:{% if tour.gallery %}showPanoramaGallery_{{ p.panorama.id }}{% else %}showImageButton_{{ f.photo.id }}{% endif %},onOver:showBubbleText_image_{{ f.photo.id }},onOut:hideBubble"/>
+            {% endfor %}
+            {% for g in p.galleries %}
+            <image id="hotspot_gallery_{{ g.gallery.id }}" location="pan:{{ g.gallery.pan|unlocalize }},tilt:{{ g.gallery.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'see' %}"
+                   mouse="onClick:showGallery_{{ g.gallery.id }},onOver:showBubbleText_gallery_{{ g.gallery.id }},onOut:hideBubble"/>
             {% endfor %}
             {% endif %}
             {% if tour.nadir %}
@@ -96,26 +100,34 @@ License : GPL v3 -->
                 {% for f in p.photos %}
                 <text id="bubbleText_image_{{ f.photo.id }}" text="{{ f.title }}"/>
                 {% endfor %}
+                {% for g in p.galleries %}
+                <text id="bubbleText_gallery_{{ g.gallery.id }}" text="{{ g.gallery.gallery.title }}"/>
+                {% endfor %}
                 {% endfor %}
             </bubbles>
         </InfoBubble>
-        {% if tour.gallery %}
         <ImageGallery path="~modules/imagegallery/ImageGallery-1.0.swf">
             <viewer path="~modules/imagegallery/images/buttons_dark_40x40.png" throbber="~modules/imagegallery/images/throbber-circles.gif" style="alpha:0.7"/>
             <close path="~modules/imagegallery/images/close.png" move="vertical:-10,horizontal:10"/>
             <groups>
                 {% for p in panoramas %}
 		{% if p.photos %}
-                <group id="galleryGroup_{{ p.panorama.id }}">
+                <group id="galleryPanoramaGroup_{{ p.panorama.id }}">
                     {% for f in p.photos %}
                     <image path="{{ f.url }}"/>
                     {% endfor %}
                 </group>
 		{% endif %}
+                {% for g in p.galleries %}
+                <group id="galleryGroup_{{ g.id }}">
+                    {% for f in g.photos %}
+                    <image path="{{ f.url }}"/>
+                    {% endfor %}
+                </group>
+                {% endfor %}
                 {% endfor %}
             </groups>
         </ImageGallery>
-        {% endif %}{# tour.gallery #}
         <ImageButton path="~modules/ImageButton-1.3.swf">
             {% if not tour.gallery %}
             {% for p in panoramas %}
@@ -207,7 +219,7 @@ License : GPL v3 -->
         <action id="showBubbleText_link_{{ l.id }}" content="InfoBubble.show(bubbleText_link_{{ l.id }})"/>
         {% endfor %}
         {% if tour.gallery and p.photos %}
-        <action id="showGallery_{{ p.panorama.id }}" content="ImageGallery.setOpen(true);ImageGallery.setGroup(galleryGroup_{{ p.panorama.id }})"/>
+        <action id="showPanoramaGallery_{{ p.panorama.id }}" content="ImageGallery.setOpen(true);ImageGallery.setGroup(galleryPanoramaGroup_{{ p.panorama.id }})"/>
 	{% endif %}
         {% for f in p.photos %}
         {% if not tour.gallery %}
@@ -219,6 +231,10 @@ License : GPL v3 -->
         <action id="moveTo_{{ f.photo.id }}" content="SaladoPlayer.moveToHotspotThen(hotspot_image_{{ f.photo.id }},90,zoomHotspot)"/>
         {% endif %}
         {% endfor %}{# f in p.photos #}
+        {% for g in p.galleries %}
+        <action id="showBubbleText_gallery_{{ g.gallery.id }}" content="InfoBubble.show(bubbleText_gallery_{{ g.gallery.id }})"/>
+        <action id="showGallery_{{ g.gallery.id }}" content="ImageGallery.setOpen(true);ImageGallery.setGroup(galleryGroup_{{ g.gallery.id }})"/>
+        {% endfor %}{# g in p.galleries #}
         {% endfor %}{# p in panoramas #}
         <action id="hideBubble" content="InfoBubble.hide()"/>
         {% if tour.scrollmenu %}

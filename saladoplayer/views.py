@@ -10,6 +10,21 @@ from django.shortcuts import render, get_object_or_404
 from django.conf import settings
 from saladoplayer.models import Tour
 
+def get_photo_url(tour, photo):
+    #get the filename of the photo in the requested size
+    try:
+        if tour.photo_size:
+            size_method_str = 'get_%s_url' % tour.photo_size
+            size_method = getattr(photo, size_method_str)
+            url = size_method()
+        else:
+            #get the default filename if no size is available
+            url = photo.image.name
+    except:
+        #get the default filename if something goes wrong
+        url = photo.image.name
+    return url
+
 def xml(request, tour_slug, hotspot):
     """Renders the xml file needed by saladoplayer flash script"""
 
@@ -33,6 +48,23 @@ def xml(request, tour_slug, hotspot):
         # consider all links in the current panorama
         links = panorama.linkhotspot_set.all()
 
+        galleries = []
+        # consider all the panorama galleries from the current panorama
+        for gallery in panorama.galleryhotspot_set.all():
+            photos = []
+            for photo in gallery.gallery.photos.all():
+                if not photo.is_public:
+                    #photo is not public, skip photo
+                    continue
+
+                photos.append({'photo': photo,
+                               'url': get_photo_url(tour, photo),
+                              })
+
+            galleries.append({'gallery': gallery,
+                              'photos': photos,
+                             })
+
         #get title, pan, tilt and url of each photo in the gallery
         photos = []
         if settings.MEDIA_URL and panorama.gallery:
@@ -53,34 +85,21 @@ def xml(request, tour_slug, hotspot):
                 except:
                     #wrong float format, skip photo
                     continue
-                #get the filename of the photo in the requested size
-                try:
-                    if tour.photo_size:
-                        size_method_str = 'get_%s_url' % tour.photo_size
-                        size_method = getattr(photo, size_method_str)
-                        url = size_method()
-                    else:
-                        #get the default filename if no size is available
-                        url = photo.image.name
-                except:
-                    #get the default filename if something goes wrong
-                    url = photo.image.name
 
                 photos.append({'photo': photo,
                                'title': photo.caption if photo.caption
                                                       else photo_attrs[0],
                                'pan': pan,
                                'tilt': tilt,
-                               'url': url
+                               'url': get_photo_url(tour, photo),
                               })
-        else:
-            photos = []
 
         panoramas.append({'panorama': panorama,
                           'chainings': chainings,
                           'informations': informations,
                           'links': links,
                           'photos': photos,
+                          'galleries': galleries,
                          })
 
     # consider all maps in the current tour
