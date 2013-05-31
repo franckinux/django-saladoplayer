@@ -28,7 +28,7 @@ License : GPL v3 -->
             {% endfor %}
             {% for f in p.photos %}
             <image id="hotspot_image_{{ f.photo.id }}" location="pan:{{ f.pan|unlocalize }},tilt:{{ f.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'see' %}"
-                   mouse="onClick:{% if tour.gallery %}showPanoramaGallery_{{ p.panorama.id }}{% else %}showImageButton_{{ f.photo.id }}{% endif %},onOver:showBubbleText_image_{{ f.photo.id }},onOut:hideBubble"/>
+                   mouse="onClick:showImageButton_{{ f.photo.id }},onOver:showBubbleText_image_{{ f.photo.id }},onOut:hideBubble"/>
             {% endfor %}
             {% for g in p.galleries %}
             <image id="hotspot_gallery_{{ g.gallery.id }}" location="pan:{{ g.gallery.pan|unlocalize }},tilt:{{ g.gallery.tilt|unlocalize }}" transform="scaleX:0.4,scaleY:0.4" path="{% photo_url 'see' %}"
@@ -111,13 +111,6 @@ License : GPL v3 -->
             <close path="~modules/imagegallery/images/close.png" move="vertical:-10,horizontal:10"/>
             <groups>
                 {% for p in panoramas %}
-		{% if p.photos %}
-                <group id="galleryPanoramaGroup_{{ p.panorama.id }}">
-                    {% for f in p.photos %}
-                    <image path="{{ f.url }}"/>
-                    {% endfor %}
-                </group>
-		{% endif %}
                 {% for g in p.galleries %}
                 <group id="galleryGroup_{{ g.id }}">
                     {% for f in g.photos %}
@@ -129,7 +122,6 @@ License : GPL v3 -->
             </groups>
         </ImageGallery>
         <ImageButton path="~modules/ImageButton-1.3.swf">
-            {% if not tour.gallery %}
             {% for p in panoramas %}
             {% for f in p.photos %}
             <button id="imageButton_{{ f.photo.id }}" path="{{ f.url }}" action="hideImageButton_{{ f.photo.id }}">
@@ -137,7 +129,6 @@ License : GPL v3 -->
             </button>
             {% endfor %}
             {% endfor %}
-            {% endif %}{# tour.gallery #}
             {% if tour.scrollmenu %}
             <button id="buttonMenu" path="~modules/menuscroller/images/ms_open.png" action="openMenu">
                 <window align="vertical:middle,horizontal:left" move="horizontal:0,vertical:0" openTween="time:0" closeTween="time:0" />
@@ -218,14 +209,9 @@ License : GPL v3 -->
         <action id="openLink_{{ l.id }}" content="LinkOpener.open(linkOpener_{{ l.id }})" />
         <action id="showBubbleText_link_{{ l.id }}" content="InfoBubble.show(bubbleText_link_{{ l.id }})"/>
         {% endfor %}
-        {% if tour.gallery and p.photos %}
-        <action id="showPanoramaGallery_{{ p.panorama.id }}" content="ImageGallery.setOpen(true);ImageGallery.setGroup(galleryPanoramaGroup_{{ p.panorama.id }})"/>
-	{% endif %}
         {% for f in p.photos %}
-        {% if not tour.gallery %}
         <action id="showImageButton_{{ f.photo.id }}" content="ImageButton.setOpen(imageButton_{{ f.photo.id }},true)"/>
         <action id="hideImageButton_{{ f.photo.id }}" content="ImageButton.setOpen(imageButton_{{ f.photo.id }},false)"/>
-        {% endif %}
         <action id="showBubbleText_image_{{ f.photo.id }}" content="InfoBubble.show(bubbleText_image_{{ f.photo.id }})"/>
         {% if tour.scrollmenu %}
         <action id="moveTo_{{ f.photo.id }}" content="SaladoPlayer.moveToHotspotThen(hotspot_image_{{ f.photo.id }},90,zoomHotspot)"/>

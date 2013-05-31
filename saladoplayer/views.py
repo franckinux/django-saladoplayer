@@ -34,10 +34,8 @@ def xml(request, tour_slug, hotspot):
 
     tour = get_object_or_404(Tour, title_slug=tour_slug)
 
-    # default values
-    panoramas = []
-
     # we iterate on all panoramas in the tour
+    panoramas = []
     for panorama in tour.panorama_set.all():
         # consider all the panorama targets from the current panorama
         chainings = panorama.from_pano.all()
@@ -49,50 +47,54 @@ def xml(request, tour_slug, hotspot):
         links = panorama.linkhotspot_set.all()
 
         galleries = []
-        # consider all the panorama galleries from the current panorama
-        for gallery in panorama.galleryhotspot_set.all():
+        if settings.MEDIA_URL:
+            # consider all the panorama galleries from the current panorama
+            for gallery in panorama.galleryhotspot_set.all():
+                if not gallery.gallery.is_public:
+                    #gallery is not public, skip gallery
+                    continue
+                photos = []
+                for photo in gallery.gallery.photos.all():
+                    if not photo.is_public:
+                        #photo is not public, skip photo
+                        continue
+
+                    photos.append({'photo': photo,
+                                   'url': get_photo_url(tour, photo),
+                                  })
+
+                galleries.append({'gallery': gallery,
+                                  'photos': photos,
+                                 })
+
+            #get title, pan, tilt and url of each photo in the gallery
             photos = []
-            for photo in gallery.gallery.photos.all():
-                if not photo.is_public:
-                    #photo is not public, skip photo
-                    continue
+            if panorama.photo_gallery:
+                for photo in panorama.photo_gallery.photos.all():
+                    if not photo.is_public:
+                        #photo is not public, skip photo
+                        continue
 
-                photos.append({'photo': photo,
-                               'url': get_photo_url(tour, photo),
-                              })
+                    #the title field value in the photo table must follow
+                    #this format : "title|pan|tilt"in order to be displayed
+                    photo_attrs = photo.title.split('|')
+                    if len(photo_attrs) != 3:
+                        #wrong parameter format, skip photo
+                        continue
+                    try:
+                        pan = float(photo_attrs[1])
+                        tilt = float(photo_attrs[2])
+                    except:
+                        #wrong float format, skip photo
+                        continue
 
-            galleries.append({'gallery': gallery,
-                              'photos': photos,
-                             })
-
-        #get title, pan, tilt and url of each photo in the gallery
-        photos = []
-        if settings.MEDIA_URL and panorama.gallery:
-            for photo in panorama.gallery.photos.all():
-                if not photo.is_public:
-                    #photo is not public, skip photo
-                    continue
-
-                #the title field value in the photo table must follow
-                #this format : "title|pan|tilt"in order to be displayed
-                photo_attrs = photo.title.split('|')
-                if len(photo_attrs) != 3:
-                    #wrong parameter format, skip photo
-                    continue
-                try:
-                    pan = float(photo_attrs[1])
-                    tilt = float(photo_attrs[2])
-                except:
-                    #wrong float format, skip photo
-                    continue
-
-                photos.append({'photo': photo,
-                               'title': photo.caption if photo.caption
-                                                      else photo_attrs[0],
-                               'pan': pan,
-                               'tilt': tilt,
-                               'url': get_photo_url(tour, photo),
-                              })
+                    photos.append({'photo': photo,
+                                   'title': photo.caption if photo.caption
+                                                          else photo_attrs[0],
+                                   'pan': pan,
+                                   'tilt': tilt,
+                                   'url': get_photo_url(tour, photo),
+                                  })
 
         panoramas.append({'panorama': panorama,
                           'chainings': chainings,

@@ -49,17 +49,13 @@ class PanoramaAdmin(admin.ModelAdmin):
         ('', {'fields': ['tour', 'directory', 'title', 'direction']}),
         ('Initial position', {'fields': [('initial_pan', 'initial_tilt')]}),
         ('Vertical field of view limitation', {'fields': [('min_tilt', 'max_tilt')]}),
-        ('Photo gallery', {'fields': ['gallery']}),
+        ('Photo gallery', {'fields': ['photo_gallery']}),
     ]
     form = PanoramaAdminForm
 
 class TourAdminForm(forms.ModelForm):
     class Meta:
         model = Tour
-        widgets = {'gallery': forms.RadioSelect(
-                                 choices=((True, 'Gallery'),
-                                          (False, 'Image button')),
-                                 renderer=HorizontalRadioRenderer)}
 
     def clean(self):
         cleaned_data = super(TourAdminForm, self).clean()
@@ -82,7 +78,7 @@ class TourAdmin(admin.ModelAdmin):
     fieldsets = [
         ('', {'fields': [('title', 'title_slug', 'first_panorama')]}),
         ('Tour options', {'fields': [('dropmenu', 'auto_rotation', 'zoomslider', 'viewfinder', 'full_screener', 'compass')]}),
-        ('Photos galleries', {'fields': ['scrollmenu', 'photo_size', 'gallery']}),
+        ('Photos galleries', {'fields': ['scrollmenu', 'photo_size']}),
         ('Nadir hotspot', {'fields': ['nadir']}),
         ('FaceBook metadata', {'fields': ['facebook', 'description', 'thumb', ('height', 'width')]}),
     ]

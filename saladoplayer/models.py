@@ -31,7 +31,6 @@ class Tour(models.Model):
     dropmenu = models.BooleanField()
     viewfinder = models.BooleanField()
     scrollmenu = models.BooleanField()
-    gallery = models.BooleanField(verbose_name=('Photo display interface'))
     zoomslider = models.BooleanField()
     auto_rotation = models.BooleanField()
     full_screener = models.BooleanField()
@@ -74,8 +73,8 @@ class Panorama(models.Model):
     initial_tilt = models.DecimalField(blank=True, null=True, **tilt_kwargs)
     min_tilt = models.DecimalField(blank=True, null=True, **tilt_kwargs)
     max_tilt = models.DecimalField(blank=True, null=True, **tilt_kwargs)
-    gallery = models.ForeignKey(Gallery,
-                                blank=True, null=True)
+    photo_gallery = models.ForeignKey(Gallery,
+                                      blank=True, null=True)
     direction = models.DecimalField(blank=True, null=True, **pan_kwargs)
 
     def __unicode__(self):
