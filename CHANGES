@@ -1,3 +1,13 @@
+Version 0.3.5
+-------------
+
+Released on June 1st, 2013
+
+* add galleries to panoramas
+* remove the choice for displaying photos as gallery or image button, use image button only
+* add tour title to link and gallery unicode
+* documentation update
+
 Version 0.3.4
 -------------
 

@@ -112,7 +112,7 @@ License : GPL v3 -->
             <groups>
                 {% for p in panoramas %}
                 {% for g in p.galleries %}
-                <group id="galleryGroup_{{ g.id }}">
+                <group id="galleryGroup_{{ g.gallery.id }}">
                     {% for f in g.photos %}
                     <image path="{{ f.url }}"/>
                     {% endfor %}
