@@ -1,3 +1,4 @@
+- make the code compatible with Python 3
 - in admin interface, choose source and target panorama within the same tour.
 - in admin interface, the first panorama must be within the same tour.
 - find a way for scaling hotspot images. a possible way is to add a third optional parameter (distance) after the pan and tild in the photo title.

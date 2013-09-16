@@ -63,11 +63,11 @@ License : GPL v3 -->
                {% endif %}
             </buttons>
         </ButtonBar>
-        <MouseCursor path="~modules/mousecursor/MouseCursor-1.2.swf">
+        <MouseCursor path="~modules/mousecursor/MouseCursor-1.3.swf">
            <settings path="~modules/mousecursor/images/cursors_31x31.png"/>
         </MouseCursor>
         {% if tour.scrollmenu %}
-        <MenuScroller path="~modules/menuscroller/MenuScroller-1.3.1.swf">
+        <MenuScroller path="~modules/menuscroller/MenuScroller-1.3.3.swf">
             <window open="false" onOpen="onMenuOpen" onClose="onMenuClose" openTween="time:0.5" closeTween="time:0.5"/>
             <close path="~modules/menuscroller/images/ms_close.png" align="vertical:middle" move="horizontal:60"/>
             <groups>
@@ -87,7 +87,7 @@ License : GPL v3 -->
         <ViewFinder path="~modules/ViewFinder-1.3.swf"/>
         {% endif %}
         {% if hotspot %}
-        <InfoBubble path="~modules/InfoBubble-1.3.2.swf">
+        <InfoBubble path="~modules/InfoBubble-1.3.3.swf">
             <bubbles>
                 {% for p in panoramas %}
                 <text id="bubbleText_panorama_{{ p.panorama.id }}" text="{{ p.panorama.title }}"/>
@@ -150,17 +150,17 @@ License : GPL v3 -->
         </DropDown> 
         {% endif %}
         {% if tour.zoomslider %}
-        <ZoomSlider path="~modules/zoomslider/ZoomSlider-1.2.swf">
+        <ZoomSlider path="~modules/zoomslider/ZoomSlider-1.3.swf">
             <window align="horizontal:right,vertical:middle"/>
-            <slider path="~modules/zoomslider/images/elements_dark_40x40.png" slidesVertical="true" minLength="200" maxLength="600"/>
+            <slider path="~modules/zoomslider/images/elements_dark_40x40.png" slidesHorizontal="false" minLength="200" maxLength="600"/>
         </ZoomSlider> 
         {% endif %}
         {% if tour.full_screener %}
-        <FullScreener path="~modules/fullscreener/FullScreener-1.0.swf">
+        <FullScreener path="~modules/fullscreener/FullScreener-1.1.swf">
             <settings path="~modules/fullscreener/images/button_thick_black_50x50.png"/>
         </FullScreener>
         {% endif %}
-        <LinkOpener path="~modules/LinkOpener-1.0.swf">
+        <LinkOpener path="~modules/LinkOpener-1.1.swf">
             <links>
                  {% for p in panoramas %}
                  {% for l in p.links %}
@@ -170,7 +170,7 @@ License : GPL v3 -->
             </links>
         </LinkOpener>
         {% if mappings %}
-        <ImageMap path="~modules/imagemap/ImageMap-1.4.2.swf">
+        <ImageMap path="~modules/imagemap/ImageMap-1.4.3.swf">
             <close path="~modules/imagemap/images/close.png" move="horizontal:10,vertical:-10"/>
             <viewer path="~modules/imagemap/images/navigation_black_20x20.png"/>
             <window margin="right:60"/>
